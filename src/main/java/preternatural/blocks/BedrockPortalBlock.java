@@ -10,6 +10,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -47,6 +49,7 @@ public class BedrockPortalBlock extends EndPortalFrameBlock {
 
 		stack.decrement(1);
 		world.setBlockState(pos, state.with(EYE, true));
+		world.playSound(player, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1f, 0.15f);
 		return tryUnlock(world, pos);
 	}
 
@@ -68,6 +71,9 @@ public class BedrockPortalBlock extends EndPortalFrameBlock {
 				WorldUtils.spawnBlockParticles(world, pos, dirs, ParticleTypes.CAMPFIRE_SIGNAL_SMOKE);
 				world.setBlockState(pos, Blocks.AIR.getDefaultState());
 			});
+			world.playSound(null, origin, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5f, 0.5f);
+			world.playSound(null, origin, SoundEvents.AMBIENT_CAVE, SoundCategory.BLOCKS, 1f, 0.5f);
+			world.playSound(null, origin, SoundEvents.AMBIENT_CAVE, SoundCategory.BLOCKS, 1f, 0.05f);
 		}
 		return true;
 	}
