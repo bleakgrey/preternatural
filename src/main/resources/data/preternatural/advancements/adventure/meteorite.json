@@ -1,0 +1,28 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "item": "preternatural:meteorite"
+    },
+    "title": {
+      "translate": "advancements.meteorite.title"
+    },
+    "description": {
+      "translate": "advancements.meteorite.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "oof": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+          "items": [{
+              "item": "preternatural:meteorite"
+          }]
+      }
+    }
+  }
+}

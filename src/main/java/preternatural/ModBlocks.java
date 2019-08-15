@@ -1,9 +1,7 @@
 package preternatural;
 
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.StainedGlassBlock;
+import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -12,6 +10,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import preternatural.blocks.BedrockPortalBlock;
 import preternatural.blocks.BlockStairs;
+import preternatural.blocks.MeteoriteOreBlock;
 
 public class ModBlocks {
 
@@ -21,6 +20,9 @@ public class ModBlocks {
     public static final Block BEDROCK_BRICK_STAIRS = new BlockStairs(Blocks.BEDROCK.getDefaultState(), FabricBlockSettings.copy(Blocks.BEDROCK).build());
     public static final Block BEDROCK_PORTAL = new BedrockPortalBlock(FabricBlockSettings.copy(Blocks.BEDROCK).build());
 
+    public static final Block METEORITE = new Block(FabricBlockSettings.of(Material.STONE, MaterialColor.STONE).strength(15.0F, 15.0F).build());
+    public static final Block METEORITE_ORE = new MeteoriteOreBlock(FabricBlockSettings.copy(METEORITE).build());
+
     static void register() {
         Mod.log("REGISTER BLOCKS");
         withItem("bedrock_bricks", BEDROCK_BRICKS);
@@ -28,6 +30,9 @@ public class ModBlocks {
         withItem("bedrock_brick_stairs", BEDROCK_BRICK_STAIRS);
         withItem("bedrock_forcefield", BEDROCK_FORCEFIELD);
         withItem("bedrock_portal", BEDROCK_PORTAL);
+
+        withItem("meteorite", METEORITE);
+        withItem("meteorite_ore", METEORITE_ORE);
     }
 
     private static void withItem(String id, Block block) {

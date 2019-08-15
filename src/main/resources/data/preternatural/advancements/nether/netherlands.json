@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:nether/get_wither_skull",
+  "display": {
+    "icon": {
+      "item": "preternatural:bedrock_portal"
+    },
+    "title": {
+      "translate": "advancements.netherlands.title"
+    },
+    "description": {
+      "translate": "advancements.netherlands.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "oof": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "dimension": "the_nether",
+        "position": {
+            "y": {
+                "min": 250,
+                "max": 300
+            }
+        }
+      }
+    }
+  }
+}

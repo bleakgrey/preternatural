@@ -30,7 +30,7 @@ public class WorldUtils {
 		return found;
 	}
 
-	public static void spawnParticlesForBlockSides(World world, BlockPos pos, Direction[] directions, ParticleEffect particle) {
+	public static void spawnBlockParticles(World world, BlockPos pos, Direction[] directions, ParticleEffect effect) {
 		Random rnd = world.random;
 		for (Direction dir : directions) {
 			BlockPos pos2 = pos.offset(dir);
@@ -39,7 +39,7 @@ public class WorldUtils {
 				double a = axis == Direction.Axis.X ? 0.5D + 0.5625D * (double) dir.getOffsetX() : (double) rnd.nextFloat();
 				double b = axis == Direction.Axis.Y ? 0.5D + 0.5625D * (double) dir.getOffsetY() : (double) rnd.nextFloat();
 				double c = axis == Direction.Axis.Z ? 0.5D + 0.5625D * (double) dir.getOffsetZ() : (double) rnd.nextFloat();
-				world.addParticle(particle, (double) pos.getX() + a, (double) pos.getY() + b, (double) pos.getZ() + c, 0.0D, 0.0D, 0.0D);
+				world.addParticle(effect, (double) pos.getX() + a, (double) pos.getY() + b, (double) pos.getZ() + c, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}
