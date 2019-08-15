@@ -1,16 +1,16 @@
 package preternatural;
 
-import net.minecraft.entity.EntityDimensions;
-import preternatural.client.render.*;
-import preternatural.entities.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.render.EntityRendererRegistry;
 import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityCategory;
+import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import preternatural.client.render.RiftRenderer;
+import preternatural.entities.EntityRift;
 
 public class ModEntities {
 
@@ -20,9 +20,9 @@ public class ModEntities {
                     .build()
     );
 
-    //@Environment(EnvType.CLIENT)
+    @Environment(EnvType.CLIENT)
     static void registerRenderers() {
-        Mod.log("======== REGISTER ENTITY RENDERERS");
+        Mod.log("REGISTER ENTITY RENDERERS");
         EntityRendererRegistry.INSTANCE.register(EntityRift.class, (disp, ctx) -> new RiftRenderer(disp));
     }
 

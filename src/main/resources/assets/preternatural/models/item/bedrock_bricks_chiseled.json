@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_column",
+    "textures": {
+        "side": "preternatural:block/bedrock_bricks_chiseled",
+        "end": "preternatural:block/bedrock_bricks"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "bottom": "preternatural:block/bedrock_bricks",
+        "top": "preternatural:block/bedrock_bricks",
+        "side": "preternatural:block/bedrock_bricks"
+    }
+}

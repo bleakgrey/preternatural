@@ -14,6 +14,7 @@ public class Mod implements ModInitializer, ClientModInitializer {
 	@Override
 	public void onInitialize() {
 		ModItems.register();
+		ModBlocks.register();
 	}
 
 	@Override

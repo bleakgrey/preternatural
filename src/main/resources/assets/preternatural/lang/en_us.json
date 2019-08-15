@@ -1,3 +1,8 @@
 {
-	"item.preternatural.claymore": "Dimensional Claymore"
+	"item.preternatural.claymore": "Dimensional Claymore",
+	"block.preternatural.bedrock_bricks": "Bedrock Bricks",
+	"block.preternatural.bedrock_bricks_chiseled": "Chiseled Bedrock Bricks",
+	"block.preternatural.bedrock_brick_stairs": "Bedrock Brick Stairs",
+	"block.preternatural.bedrock_forcefield": "Bedrock Portal Forcefield",
+	"block.preternatural.bedrock_portal": "Bedrock Portal Frame"
 }

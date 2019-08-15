@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "": [
+            { "model": "preternatural:block/bedrock_bricks_chiseled" }
+        ]
+    }
+}
