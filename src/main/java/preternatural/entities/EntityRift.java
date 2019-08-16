@@ -1,5 +1,6 @@
 package preternatural.entities;
 
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -8,7 +9,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
-import preternatural.ModEntities;
 import preternatural.utils.Waypoint;
 
 public class EntityRift extends MobEntity {
@@ -20,14 +20,9 @@ public class EntityRift extends MobEntity {
     public static final TrackedData<Integer> TRACKER_Z = DataTracker.registerData(EntityRift.class, TrackedDataHandlerRegistry.INTEGER);
     public static final TrackedData<String> TRACKER_DIM = DataTracker.registerData(EntityRift.class, TrackedDataHandlerRegistry.STRING);
 
-    public EntityRift(World world) {
-        super(ModEntities.RIFT, world);
-    }
-
-    public EntityRift(World world, Waypoint waypoint) {
-        super(ModEntities.RIFT, world);
-        waypoint.assignToRift(this);
-    }
+	public EntityRift(EntityType<? extends EntityRift> entityType, World world) {
+		super(entityType, world);
+	}
 
     @Override
     protected void initDataTracker() {

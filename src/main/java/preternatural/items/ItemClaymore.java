@@ -10,11 +10,15 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
+import preternatural.Mod;
+import preternatural.ModEntities;
 import preternatural.entities.EntityRift;
 import preternatural.utils.Waypoint;
 
@@ -54,12 +58,24 @@ public class ItemClaymore extends SwordItem {
             pos = ctxBlockPos.offset(dir);
 
         Waypoint waypoint = new Waypoint(new BlockPos(0,100,0), player.dimension);
-        EntityRift rift = new EntityRift(world, waypoint);
+        EntityRift rift = ModEntities.RIFT.create(world);
+        waypoint.assignToRift(rift);
         rift.setPositionAndAngles(pos, player.yaw, 0);
         rift.headYaw = rift.yaw;
         rift.field_6283 = rift.yaw;
         world.spawnEntity(rift);
         return ActionResult.SUCCESS;
+    }
+
+    @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+        ItemStack stack = player.getStackInHand(hand);
+        if (player.isInSneakingPose()) {
+            Mod.log("Show GUI here...");
+            return new TypedActionResult(ActionResult.SUCCESS, stack);
+        }
+        else
+            return super.use(world, player, hand);
     }
 
 }
