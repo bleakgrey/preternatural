@@ -20,11 +20,15 @@ public class ModEntities {
                     .size(new EntityDimensions(1,2,true))
                     .build()
     );
-    public static EntityType<ScarecrowEntity> SCARECROW = Registry.register(Registry.ENTITY_TYPE, new Identifier(Mod.DOMAIN, ScarecrowEntity.ID),
-            FabricEntityTypeBuilder.<ScarecrowEntity>create(EntityCategory.MISC, (entityType, world) -> new ScarecrowEntity(entityType, world))
+    public static EntityType<ScarecrowEntity> SCARECROW = Registry.register(Registry.ENTITY_TYPE, new Identifier(Mod.DOMAIN, "scarecrow"),
+            FabricEntityTypeBuilder.<ScarecrowEntity>create(EntityCategory.MISC, ScarecrowEntity::new)
                     .size(new EntityDimensions(1,2,true))
                     .build()
     );
+
+    static void register() {
+        Mod.log("REGISTER ENTITIES");
+    }
 
     @Environment(EnvType.CLIENT)
     static void registerRenderers() {

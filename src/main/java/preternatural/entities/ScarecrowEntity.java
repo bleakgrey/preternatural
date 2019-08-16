@@ -19,8 +19,7 @@ import net.minecraft.world.World;
 
 public class ScarecrowEntity extends ArmorStandEntity {
 
-	public static final String ID = "scarecrow";
-	public static final TrackedData<Boolean> TRACKER_EXCITEMENT = DataTracker.registerData(ScarecrowEntity.class, TrackedDataHandlerRegistry.BOOLEAN);;
+	public static final TrackedData<Boolean> TRACKER_EXCITEMENT = DataTracker.registerData(ScarecrowEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
 	public ScarecrowEntity(EntityType<? extends ArmorStandEntity> entityType, World world) {
 		super(entityType, world);
@@ -64,7 +63,7 @@ public class ScarecrowEntity extends ArmorStandEntity {
 		}
 		else {
 			if(this.world.random.nextInt(getMovementTickRate()) == 0) {
-				this.playSound(SoundEvents.ENTITY_ITEM_FRAME_BREAK, 0.25f, 0.5f);
+				this.playSound(SoundEvents.ENTITY_ITEM_FRAME_BREAK, 0.5f, 0.5f);
 				this.dataTracker.set(TRACKER_LEFT_ARM_ROTATION, new EulerAngle(-10.0F * this.world.random.nextFloat(), 0.0F, -10.0F));
 				this.dataTracker.set(TRACKER_RIGHT_ARM_ROTATION, new EulerAngle(-15.0F * this.world.random.nextFloat(), 0.0F, 10.0F));
 				this.dataTracker.set(TRACKER_HEAD_ROTATION, new EulerAngle(this.world.random.nextFloat() * 5f, this.world.random.nextFloat() * 5f, 0.0F));

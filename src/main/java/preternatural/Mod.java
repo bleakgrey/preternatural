@@ -15,6 +15,7 @@ public class Mod implements ModInitializer, ClientModInitializer {
 	public void onInitialize() {
 		ModItems.register();
 		ModBlocks.register();
+		ModEntities.register();
 		ModGeneration.register();
 	}
 

@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CropBlock;
 import net.minecraft.block.FarmlandBlock;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCategory;
 import net.minecraft.entity.EntityType;
 import net.minecraft.tag.BlockTags;
@@ -20,6 +21,7 @@ import net.minecraft.world.gen.decorator.Decorator;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.TernarySurfaceConfig;
+import preternatural.ModEntities;
 
 import java.util.Random;
 import java.util.function.Function;
@@ -30,26 +32,35 @@ public class WheatFieldBiome extends Biome {
 	private static final BlockState GRASS = Blocks.GRASS_BLOCK.getDefaultState();
 	private static final BlockState TOP_BLOCK = Blocks.DIRT.getDefaultState();
 	private static final BlockState GRAVEL = Blocks.GRAVEL.getDefaultState();
+	private static final BlockState PEDESTAL = Blocks.OAK_SLAB.getDefaultState();
 
 	private static final TernarySurfaceConfig CONFIG = new TernarySurfaceConfig(TOP_BLOCK, TOP_BLOCK, GRAVEL);
-	private static final Feature<GrassFeatureConfig> WHEAT_FEATURE = new WheatFeature(GrassFeatureConfig::deserialize);
+	private static final Feature<GrassFeatureConfig> WHEAT_FEATURE = new WheatyPlaceFeature(GrassFeatureConfig::deserialize);
 
-	private static class WheatFeature extends GrassFeature {
-		public WheatFeature(Function<Dynamic<?>, ? extends GrassFeatureConfig> function_1) {
+	private static class WheatyPlaceFeature extends GrassFeature {
+		public WheatyPlaceFeature(Function<Dynamic<?>, ? extends GrassFeatureConfig> function_1) {
 			super(function_1);
 		}
 
 		@Override
-		public boolean method_14080(IWorld world, ChunkGenerator<? extends ChunkGeneratorConfig> generator, Random rnd, BlockPos pos1, GrassFeatureConfig cfg) {
-			for(BlockState blockState_1 = world.getBlockState(pos1); (blockState_1.isAir() || blockState_1.matches(BlockTags.LEAVES)) && pos1.getY() > 0; blockState_1 = world.getBlockState(pos1))
+		public boolean method_14080(IWorld iWorld, ChunkGenerator<? extends ChunkGeneratorConfig> generator, Random rnd, BlockPos pos1, GrassFeatureConfig cfg) {
+			for(BlockState blockState_1 = iWorld.getBlockState(pos1); (blockState_1.isAir() || blockState_1.matches(BlockTags.LEAVES)) && pos1.getY() > 0; blockState_1 = iWorld.getBlockState(pos1))
 				pos1 = pos1.down();
 
 			int int_1 = 0;
 			for(int int_2 = 0; int_2 < 128; ++int_2) {
 				BlockPos pos2 = pos1.add(rnd.nextInt(8) - rnd.nextInt(8), rnd.nextInt(4) - rnd.nextInt(4), rnd.nextInt(8) - rnd.nextInt(8));
-				if (world.isAir(pos2) && Blocks.POPPY.canPlaceAt(world.getBlockState(pos2), world, pos2)) {
-					world.setBlockState(pos2.down(), Blocks.FARMLAND.getDefaultState().with(FarmlandBlock.MOISTURE, 7), 0);
-					world.setBlockState(pos2, cfg.state, 0);
+				if(iWorld.isAir(pos2) && Blocks.POPPY.canPlaceAt(iWorld.getBlockState(pos2), iWorld, pos2)) {
+					if(int_1 == 0 && iWorld.getRandom().nextInt(50) == 0) {
+						iWorld.setBlockState(pos2, PEDESTAL, 0);
+						Entity entity = ModEntities.SCARECROW.create(iWorld.getWorld());
+						entity.setPositionAnglesAndUpdate(pos2.getX()+0.5d, pos2.up().getY(), pos2.getZ()+0.5d, iWorld.getRandom().nextFloat()*360, iWorld.getRandom().nextFloat()*360);
+						iWorld.spawnEntity(entity);
+					}
+					else {
+						iWorld.setBlockState(pos2.down(), Blocks.FARMLAND.getDefaultState().with(FarmlandBlock.MOISTURE, 7), 0);
+						iWorld.setBlockState(pos2, cfg.state, 0);
+					}
 					++int_1;
 				}
 			}
