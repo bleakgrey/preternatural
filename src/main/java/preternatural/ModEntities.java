@@ -16,7 +16,7 @@ import preternatural.entities.ScarecrowEntity;
 public class ModEntities {
 
     public static EntityType<EntityRift> RIFT = Registry.register(Registry.ENTITY_TYPE, new Identifier(Mod.DOMAIN, "rift"),
-            FabricEntityTypeBuilder.<EntityRift>create(EntityCategory.MISC, (entityType, world) -> new EntityRift(world, null))
+            FabricEntityTypeBuilder.<EntityRift>create(EntityCategory.MISC, (entityType, world) -> new EntityRift(world))
                     .size(new EntityDimensions(1,2,true))
                     .build()
     );

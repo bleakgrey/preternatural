@@ -1,7 +1,5 @@
 package preternatural.items;
 
-import preternatural.utils.Waypoint;
-import preternatural.entities.EntityRift;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
@@ -16,8 +14,9 @@ import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.explosion.Explosion;
+import preternatural.entities.EntityRift;
+import preternatural.utils.Waypoint;
 
 public class ItemClaymore extends SwordItem {
 
@@ -54,13 +53,12 @@ public class ItemClaymore extends SwordItem {
         if (!blockState.getCollisionShape(world, ctxBlockPos).isEmpty())
             pos = ctxBlockPos.offset(dir);
 
-        Waypoint waypoint = new Waypoint(new BlockPos(0,0,0), DimensionType.OVERWORLD);
-        EntityRift rift = new EntityRift(ctx.getWorld(), waypoint);
+        Waypoint waypoint = new Waypoint(new BlockPos(0,100,0), player.dimension);
+        EntityRift rift = new EntityRift(world, waypoint);
         rift.setPositionAndAngles(pos, player.yaw, 0);
         rift.headYaw = rift.yaw;
         rift.field_6283 = rift.yaw;
         world.spawnEntity(rift);
-
         return ActionResult.SUCCESS;
     }
 
