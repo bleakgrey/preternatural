@@ -2,25 +2,28 @@ package preternatural.items;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.block.BannerBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BannerBlockEntity;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Rarity;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import preternatural.Mod;
 import preternatural.ModEntities;
+import preternatural.client.gui.GuiWaypointSelect;
 import preternatural.entities.EntityRift;
 import preternatural.utils.Waypoint;
+import preternatural.utils.WorldUtils;
 
 public class ItemClaymore extends SwordItem {
 
@@ -50,6 +53,10 @@ public class ItemClaymore extends SwordItem {
         BlockState blockState = world.getBlockState(ctxBlockPos);
         PlayerEntity player = ctx.getPlayer();
 
+        if(blockState.getBlock() instanceof BannerBlock) {
+            return onUsedOnBanner(ctx);
+        }
+
         if (world.isClient || player == null)
             return ActionResult.SUCCESS;
 
@@ -67,11 +74,36 @@ public class ItemClaymore extends SwordItem {
         return ActionResult.SUCCESS;
     }
 
+    protected ActionResult onUsedOnBanner(ItemUsageContext ctx) {
+        World world = ctx.getWorld();
+        BlockPos pos = ctx.getBlockPos();
+        BannerBlockEntity entity = (BannerBlockEntity) world.getBlockEntity(pos);
+        BlockState blockState = world.getBlockState(pos);
+        DyeColor color = ((BannerBlock)blockState.getBlock()).getColor();
+        PlayerEntity player = ctx.getPlayer();
+
+        if(entity == null) {
+            Mod.log("No BannerBlockEntity entity found!");
+            return ActionResult.FAIL;
+        }
+
+        if(player.isSneaking()) {
+            WorldUtils.spawnBlockParticles(world, pos, Direction.values(), ParticleTypes.POOF);
+        }
+        else {
+            WorldUtils.spawnBlockParticles(world, pos, Direction.values(), ParticleTypes.PORTAL);
+        }
+
+        Mod.log(color.toString());
+        return ActionResult.SUCCESS;
+    }
+
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
         if (player.isInSneakingPose()) {
-            Mod.log("Show GUI here...");
+            if(world.isClient)
+                MinecraftClient.getInstance().openScreen(new GuiWaypointSelect(stack));
             return new TypedActionResult(ActionResult.SUCCESS, stack);
         }
         else
