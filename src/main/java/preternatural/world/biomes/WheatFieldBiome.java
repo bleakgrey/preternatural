@@ -15,8 +15,6 @@ import net.minecraft.world.biome.DefaultBiomeFeatures;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.ChunkGeneratorConfig;
-import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
-import net.minecraft.world.gen.decorator.CountChanceDecoratorConfig;
 import net.minecraft.world.gen.decorator.CountDecoratorConfig;
 import net.minecraft.world.gen.decorator.Decorator;
 import net.minecraft.world.gen.feature.*;
@@ -81,15 +79,16 @@ public class WheatFieldBiome extends Biome {
 		DefaultBiomeFeatures.addDungeons(this);
 		DefaultBiomeFeatures.addMineables(this);
 		DefaultBiomeFeatures.addDefaultOres(this);
+		DefaultBiomeFeatures.addDefaultDisks(this);
 		DefaultBiomeFeatures.addLandCarvers(this);
 		DefaultBiomeFeatures.addSprings(this);
 		DefaultBiomeFeatures.addDefaultLakes(this);
 
-		this.addSpawn(EntityCategory.CREATURE, new SpawnEntry(EntityType.SHEEP, 12, 4, 4));
-		this.addSpawn(EntityCategory.CREATURE, new SpawnEntry(EntityType.CHICKEN, 10, 4, 4));
-		this.addSpawn(EntityCategory.CREATURE, new SpawnEntry(EntityType.COW, 8, 4, 4));
+		this.addSpawn(EntityCategory.CREATURE, new SpawnEntry(EntityType.SHEEP, 12, 1, 1));
+		this.addSpawn(EntityCategory.CREATURE, new SpawnEntry(EntityType.CHICKEN, 10, 1, 1));
+		this.addSpawn(EntityCategory.CREATURE, new SpawnEntry(EntityType.COW, 8, 1, 1));
 
-		this.addFeature(GenerationStep.Feature.VEGETAL_DECORATION, Biome.configureFeature(WHEAT_FEATURE, new GrassFeatureConfig(WHEAT), Decorator.COUNT_HEIGHTMAP_DOUBLE, new CountDecoratorConfig(12)));
+		this.addFeature(GenerationStep.Feature.VEGETAL_DECORATION, Biome.configureFeature(WHEAT_FEATURE, new GrassFeatureConfig(WHEAT), Decorator.COUNT_HEIGHTMAP_DOUBLE, new CountDecoratorConfig(10)));
 	}
 
 }

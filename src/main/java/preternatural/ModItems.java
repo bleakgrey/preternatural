@@ -1,11 +1,11 @@
 package preternatural;
 
-import preternatural.items.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import preternatural.items.ItemClaymore;
 
 public class ModItems {
 
@@ -20,6 +20,7 @@ public class ModItems {
         item(CLAYMORE, "claymore");
 
         item(new SpawnEggItem(ModEntities.RIFT, 0,0, new Item.Settings().group(ItemGroup.MISC)), "spawner_rift");
+        item(new SpawnEggItem(ModEntities.SCARECROW, 0,0, new Item.Settings().group(ItemGroup.MISC)), "spawner_scarecrow");
     }
 
 }
