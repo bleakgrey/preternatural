@@ -13,5 +13,7 @@
 	"advancements.netherlands.title": "Unwelcome Descent",
 	"advancements.netherlands.description": "Survive the descension to Netherlands... somehow",
 	"advancements.meteorite.title": "A Color From Space",
-	"advancements.meteorite.description": "Find and mine some strange meteorite ore"
+	"advancements.meteorite.description": "Find and mine some strange meteorite ore",
+
+	"biome.preternatural.wheat_field": "Wheat Field"
 }
