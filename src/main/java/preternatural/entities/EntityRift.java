@@ -63,7 +63,7 @@ public class EntityRift extends MobEntity {
     public void tickMovement() {
         if(this.world.isClient)
             for(int i = 0; i < 1; ++i)
-                this.world.addParticle(ParticleTypes.SMOKE, this.x + (this.random.nextDouble() - 0.5D) * (double)this.getWidth(), this.y + this.random.nextDouble() * (double)this.getHeight(), this.z + (this.random.nextDouble() - 0.5D) * (double)this.getWidth(), 0.0D, 0.0D, 0.0D);
+                this.world.addParticle(ParticleTypes.MYCELIUM, this.x + (this.random.nextDouble() - 0.5D) * (double)this.getWidth(), this.y + this.random.nextDouble() * (double)this.getHeight(), this.z + (this.random.nextDouble() - 0.5D) * (double)this.getWidth(), 0.0D, 0.0D, 0.0D);
     }
 
 }

@@ -9,6 +9,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -45,7 +46,8 @@ public class ItemClaymore extends SwordItem {
     public ItemClaymore() {
         super(ToolMaterials.IRON, 0, -2.4F, new Item.Settings()
                 .group(ItemGroup.TOOLS)
-                .rarity(Rarity.RARE));
+                .rarity(Rarity.RARE)
+		        .maxDamage(32));
     }
 
     @Override
@@ -67,6 +69,7 @@ public class ItemClaymore extends SwordItem {
         Direction dir = ctx.getSide();
         BlockState blockState = world.getBlockState(ctxBlockPos);
         PlayerEntity player = ctx.getPlayer();
+        Hand hand = ctx.getHand();
 	    Waypoint waypoint = new Waypoint(player.getBlockPos(), player.dimension);
 
         if (blockState.getBlock() instanceof BannerBlock)
@@ -79,14 +82,23 @@ public class ItemClaymore extends SwordItem {
         if (!blockState.getCollisionShape(world, ctxBlockPos).isEmpty())
             pos = ctxBlockPos.offset(dir);
 
-        EntityRift rift = ModEntities.RIFT.create(world);
-        waypoint.assignToRift(rift);
-        rift.setPositionAndAngles(pos, player.yaw, 0);
-        rift.headYaw = rift.yaw;
-        rift.field_6283 = rift.yaw;
-        world.spawnEntity(rift);
-	    player.getItemCooldownManager().set(this, EntityRift.LIFESPAN);
-        return ActionResult.SUCCESS;
+		if (spawnRift(world, waypoint, pos, player)) {
+			player.getItemCooldownManager().set(this, EntityRift.LIFESPAN);
+			stack.damage(1, player, entity -> {
+				entity.sendEquipmentBreakStatus(hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+			});
+			return ActionResult.SUCCESS;
+		}
+        return ActionResult.FAIL;
+    }
+
+    public boolean spawnRift(World world, Waypoint waypoint, BlockPos pos, Entity entity) {
+	    EntityRift rift = ModEntities.RIFT.create(world);
+	    waypoint.assignToRift(rift);
+	    rift.setPositionAndAngles(pos, entity.yaw, 0);
+	    rift.headYaw = rift.yaw;
+	    rift.field_6283 = rift.yaw;
+	    return world.spawnEntity(rift);
     }
 
     protected ActionResult onUsedOnBanner(ItemUsageContext ctx, Waypoint waypoint) {
