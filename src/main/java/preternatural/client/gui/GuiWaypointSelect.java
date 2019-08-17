@@ -10,13 +10,16 @@ import net.minecraft.client.render.GuiLighting;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.util.NarratorManager;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
+import preternatural.items.ItemClaymore;
 import preternatural.utils.Waypoint;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static net.minecraft.client.render.VertexFormats.POSITION_COLOR;
 
@@ -26,7 +29,7 @@ public class GuiWaypointSelect extends Screen {
 	protected int slotSelected = -1;
 	protected ItemStack tool;
 
-	protected HashMap<DyeColor, Waypoint> waypoints = new HashMap<>();
+	protected ArrayList<Waypoint> waypoints = new ArrayList<>();
 	protected ArrayList<ItemStack> displayStacks = new ArrayList<>();
 
 	public GuiWaypointSelect(ItemStack stack) {
@@ -36,13 +39,23 @@ public class GuiWaypointSelect extends Screen {
 
 	@Override
 	protected void init() {
-		DyeColor[] colors = {DyeColor.RED, DyeColor.BLUE, DyeColor.GREEN, DyeColor.YELLOW, DyeColor.WHITE, DyeColor.BLACK};
-		//DyeColor[] colors = DyeColor.values();
-		for (DyeColor color : colors) {
-			waypoints.put(color, new Waypoint());
-			ItemStack banner = new ItemStack(BannerBlock.getForColor(color).asItem());
-			displayStacks.add(banner);
-		}
+		CompoundTag tag = tool.getOrCreateSubTag(ItemClaymore.SUBTAG);
+		ListTag list = tag.getList(ItemClaymore.TAG_RECORDS, 10);
+		list.forEach(tag1 -> {
+			CompoundTag record = (CompoundTag) tag1;
+			Waypoint waypoint = Waypoint.fromNBT(record);
+			DyeColor color = DyeColor.byName(record.getString("color"), DyeColor.WHITE);
+			ItemStack stack = new ItemStack(BannerBlock.getForColor(color).asItem());
+			stack.setTag(record);
+
+			if (record.containsKey("CustomName")) {
+				Text name = Text.Serializer.fromJson(record.getString("CustomName"));
+				stack.setCustomName(name);
+			}
+
+			waypoints.add(waypoint);
+			displayStacks.add(stack);
+		});
 	}
 
 	@Override
@@ -114,8 +127,9 @@ public class GuiWaypointSelect extends Screen {
 			if(!stack.isEmpty()) {
 				float xsp = xp - 4;
 				float ysp = yp;
-				String name = (mouseInSector ? ChatFormatting.RESET : ChatFormatting.GRAY) + stack.getName().asString();
-				int width = font.getStringWidth(name);
+
+				String waypointName = (mouseInSector ? ChatFormatting.RESET : ChatFormatting.GRAY) + stack.getName().asString();
+				int width = font.getStringWidth(waypointName);
 
 				double mod = 0.6;
 				int xdp = (int) ((xp - x) * mod + x);
@@ -128,7 +142,7 @@ public class GuiWaypointSelect extends Screen {
 				if(ysp < y)
 					ysp -= 9;
 
-				font.drawWithShadow(name, xsp, ysp, 0xFFFFFF);
+				font.drawWithShadow(waypointName, xsp, ysp, 0xFFFFFF);
 			}
 		}
 

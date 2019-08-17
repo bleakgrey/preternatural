@@ -68,9 +68,8 @@ public class ItemClaymore extends SwordItem {
         PlayerEntity player = ctx.getPlayer();
 	    Waypoint waypoint = new Waypoint(player.getBlockPos(), player.dimension);
 
-        if (blockState.getBlock() instanceof BannerBlock) {
+        if (blockState.getBlock() instanceof BannerBlock)
             return onUsedOnBanner(ctx, waypoint);
-        }
 
 	    if (world.isClient)
 		    return ActionResult.SUCCESS;
@@ -111,10 +110,10 @@ public class ItemClaymore extends SwordItem {
         CompoundTag blockTag = new CompoundTag();
         blockWaypoint.toNBT(blockTag);
         tag.put("block", blockTag);
-        //Mod.log("ASSEMBLE TAG: "+tag.toString());
 
         boolean alreadySaved = containsRecord(stack, tag);
         WorldUtils.spawnBlockParticles(world, pos, Direction.values(), alreadySaved ? ParticleTypes.POOF : ParticleTypes.PORTAL);
+        WorldUtils.spawnBlockParticles(world, pos.up(), Direction.values(), alreadySaved ? ParticleTypes.POOF : ParticleTypes.PORTAL);
 	    manipulateRecord(stack, tag, alreadySaved);
 
         return ActionResult.SUCCESS;
@@ -157,8 +156,7 @@ public class ItemClaymore extends SwordItem {
 
 	    nbt.put(TAG_RECORDS, list);
 	    stack.putSubTag(SUBTAG, nbt);
-
-	    Mod.log("Result stack NBT: "+stack.getTag().toString());
+	    //Mod.log("Result stack NBT: "+stack.getTag().toString());
     }
 
     @Override
