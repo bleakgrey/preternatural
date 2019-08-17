@@ -30,6 +30,23 @@ public class Waypoint {
         return this.dim == null || this.pos == null;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        else {
+            if (obj instanceof Waypoint) {
+                Waypoint w = (Waypoint) obj;
+                return
+                        this.pos.getX() == w.pos.getX() &&
+                        this.pos.getY() == w.pos.getY() &&
+                        this.pos.getZ() == w.pos.getZ() &&
+                        this.dim.toString().equals(w.dim.toString());
+            }
+            return false;
+        }
+    }
+
     public void toNBT(CompoundTag nbt) {
         if (isEmpty())
             return;

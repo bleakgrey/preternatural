@@ -2,17 +2,25 @@ package preternatural.items;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.BannerBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -25,7 +33,13 @@ import preternatural.entities.EntityRift;
 import preternatural.utils.Waypoint;
 import preternatural.utils.WorldUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ItemClaymore extends SwordItem {
+
+	public static final String SUBTAG = "waypoints";
+	public static final String TAG_RECORDS = "v1";
 
     public ItemClaymore() {
         super(ToolMaterials.IRON, 0, -2.4F, new Item.Settings()
@@ -52,19 +66,19 @@ public class ItemClaymore extends SwordItem {
         Direction dir = ctx.getSide();
         BlockState blockState = world.getBlockState(ctxBlockPos);
         PlayerEntity player = ctx.getPlayer();
+	    Waypoint waypoint = new Waypoint(player.getBlockPos(), player.dimension);
 
-        if(blockState.getBlock() instanceof BannerBlock) {
-            return onUsedOnBanner(ctx);
+        if (blockState.getBlock() instanceof BannerBlock) {
+            return onUsedOnBanner(ctx, waypoint);
         }
 
-        if (world.isClient || player == null)
-            return ActionResult.SUCCESS;
+	    if (world.isClient)
+		    return ActionResult.SUCCESS;
 
         BlockPos pos = ctxBlockPos;
         if (!blockState.getCollisionShape(world, ctxBlockPos).isEmpty())
             pos = ctxBlockPos.offset(dir);
 
-        Waypoint waypoint = new Waypoint(new BlockPos(0,100,0), player.dimension);
         EntityRift rift = ModEntities.RIFT.create(world);
         waypoint.assignToRift(rift);
         rift.setPositionAndAngles(pos, player.yaw, 0);
@@ -74,40 +88,98 @@ public class ItemClaymore extends SwordItem {
         return ActionResult.SUCCESS;
     }
 
-    protected ActionResult onUsedOnBanner(ItemUsageContext ctx) {
+    protected ActionResult onUsedOnBanner(ItemUsageContext ctx, Waypoint waypoint) {
         World world = ctx.getWorld();
         BlockPos pos = ctx.getBlockPos();
         BannerBlockEntity entity = (BannerBlockEntity) world.getBlockEntity(pos);
         BlockState blockState = world.getBlockState(pos);
         DyeColor color = ((BannerBlock)blockState.getBlock()).getColor();
         PlayerEntity player = ctx.getPlayer();
+        ItemStack stack = ctx.getStack();
 
-        if(entity == null) {
+        if (entity == null) {
             Mod.log("No BannerBlockEntity entity found!");
             return ActionResult.FAIL;
         }
 
-        if(player.isSneaking()) {
-            WorldUtils.spawnBlockParticles(world, pos, Direction.values(), ParticleTypes.POOF);
-        }
-        else {
-            WorldUtils.spawnBlockParticles(world, pos, Direction.values(), ParticleTypes.PORTAL);
-        }
+	    CompoundTag tag = new CompoundTag();
+        tag.putString("color", color.toString());
+        entity.toTag(tag);
+        waypoint.toNBT(tag);
 
-        Mod.log(color.toString());
+        Waypoint blockWaypoint = new Waypoint(pos, player.dimension);
+        CompoundTag blockTag = new CompoundTag();
+        blockWaypoint.toNBT(blockTag);
+        tag.put("block", blockTag);
+        //Mod.log("ASSEMBLE TAG: "+tag.toString());
+
+        boolean alreadySaved = containsRecord(stack, tag);
+        WorldUtils.spawnBlockParticles(world, pos, Direction.values(), alreadySaved ? ParticleTypes.POOF : ParticleTypes.PORTAL);
+	    manipulateRecord(stack, tag, alreadySaved);
+
         return ActionResult.SUCCESS;
+    }
+
+    public static boolean areRecordsEqual(CompoundTag tag1, CompoundTag tag2) {
+		CompoundTag blockTag1 = tag1.getCompound("block");
+		CompoundTag blockTag2 = tag2.getCompound("block");
+		Waypoint waypoint1 = Waypoint.fromNBT(blockTag1);
+		Waypoint waypoint2 = Waypoint.fromNBT(blockTag2);
+		return waypoint1.equals(waypoint2);
+    }
+
+    public static boolean containsRecord(ItemStack stack, CompoundTag tag) {
+	    ListTag list = stack.getOrCreateSubTag(SUBTAG).getList(TAG_RECORDS, 10);
+	    for (Tag item : list) {
+		    CompoundTag listTag = (CompoundTag) item;
+		    if (areRecordsEqual(listTag, tag))
+		    	return true;
+	    }
+	    return false;
+    }
+
+    public static void manipulateRecord(ItemStack stack, CompoundTag tag, boolean removeMode) {
+	    CompoundTag nbt = stack.getOrCreateSubTag(SUBTAG);
+    	ListTag list = nbt.getList(TAG_RECORDS, 10);
+
+	    if(removeMode) {
+		    ArrayList<CompoundTag> toRemove = new ArrayList<>();
+		    for (int i = 0; i < list.size(); i++) {
+			    CompoundTag listTag = list.getCompoundTag(i);
+			    if (areRecordsEqual(listTag, tag)) {
+			    	toRemove.add(listTag);
+			    }
+		    }
+		    toRemove.forEach(list::remove);
+	    }
+	    else
+	        list.add(tag);
+
+	    nbt.put(TAG_RECORDS, list);
+	    stack.putSubTag(SUBTAG, nbt);
+
+	    Mod.log("Result stack NBT: "+stack.getTag().toString());
     }
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
         if (player.isInSneakingPose()) {
-            if(world.isClient)
+            if (world.isClient)
                 MinecraftClient.getInstance().openScreen(new GuiWaypointSelect(stack));
             return new TypedActionResult(ActionResult.SUCCESS, stack);
         }
         else
             return super.use(world, player, hand);
     }
+
+    @Override
+	@Environment(EnvType.CLIENT)
+	public void appendTooltip(ItemStack stack, World world, List<Text> lines, TooltipContext ctx) {
+		CompoundTag nbt = stack.getOrCreateSubTag(SUBTAG);
+		ListTag list = nbt.getList(TAG_RECORDS, 10);
+		if (list.size() > 0)
+			lines.add(new LiteralText("Saved waypoints: "+list.size()));
+	}
 
 }
