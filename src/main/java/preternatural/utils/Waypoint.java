@@ -13,6 +13,7 @@ public class Waypoint {
 
     public DimensionType dim = null;
     public BlockPos pos = null;
+    public String name = "Unknown";
 
     public Waypoint() {}
 
@@ -54,12 +55,16 @@ public class Waypoint {
         nbt.putInt("y", pos.getY());
         nbt.putInt("z", pos.getZ());
         nbt.putString("dim", DimensionType.getId(dim).toString());
+        nbt.putString("name", this.name);
     }
 
     public static Waypoint fromNBT(CompoundTag nbt) {
         BlockPos pos = new BlockPos(nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"));
         DimensionType dim = DimensionType.byId(new Identifier(nbt.getString("dim")));
-        return new Waypoint(pos, dim);
+        Waypoint waypoint = new Waypoint(pos, dim);
+        if (nbt.containsKey("name"))
+            waypoint.name = nbt.getString("name");
+        return waypoint;
     }
 
     public void assignToRift(EntityRift rift) {

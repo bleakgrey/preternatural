@@ -27,9 +27,9 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import preternatural.Mod;
-import preternatural.ModEntities;
 import preternatural.client.gui.GuiWaypointSelect;
 import preternatural.entities.EntityRift;
+import preternatural.entities.ModEntities;
 import preternatural.utils.Waypoint;
 import preternatural.utils.WorldUtils;
 
@@ -40,6 +40,7 @@ public class ItemClaymore extends SwordItem {
 
 	public static final String SUBTAG = "waypoints";
 	public static final String TAG_RECORDS = "v1";
+	public static final String TAG_DESTINATION = "destination";
 
     public ItemClaymore() {
         super(ToolMaterials.IRON, 0, -2.4F, new Item.Settings()
@@ -160,12 +161,19 @@ public class ItemClaymore extends SwordItem {
 	    //Mod.log("Result stack NBT: "+stack.getTag().toString());
     }
 
+    public static void writeSelectedDestination(ItemStack stack, Waypoint waypoint) {
+    	CompoundTag nbt = stack.getOrCreateSubTag(SUBTAG);
+    	CompoundTag tag = new CompoundTag();
+	    waypoint.toNBT(tag);
+    	nbt.put(TAG_DESTINATION, tag);
+    }
+
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
         if (player.isInSneakingPose()) {
             if (world.isClient)
-                MinecraftClient.getInstance().openScreen(new GuiWaypointSelect(stack));
+                MinecraftClient.getInstance().openScreen(new GuiWaypointSelect(stack, hand));
             return new TypedActionResult(ActionResult.SUCCESS, stack);
         }
         else
@@ -176,9 +184,15 @@ public class ItemClaymore extends SwordItem {
 	@Environment(EnvType.CLIENT)
 	public void appendTooltip(ItemStack stack, World world, List<Text> lines, TooltipContext ctx) {
 		CompoundTag nbt = stack.getOrCreateSubTag(SUBTAG);
-		ListTag list = nbt.getList(TAG_RECORDS, 10);
-		if (list.size() > 0)
-			lines.add(new LiteralText("Saved waypoints: "+list.size()));
+		if (nbt.containsKey(TAG_DESTINATION)){
+			CompoundTag destination = nbt.getCompound(TAG_DESTINATION);
+			Waypoint waypoint = Waypoint.fromNBT(destination);
+			lines.add(new LiteralText("Destination: ").append(waypoint.name));
+		}
+
+//	    ListTag list = nbt.getList(TAG_RECORDS, 10);
+//	    if (list.size() > 0)
+//		    lines.add(new LiteralText("Saved waypoints: "+list.size()));
 	}
 
 }

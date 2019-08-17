@@ -2,6 +2,8 @@ package preternatural.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.realmsclient.gui.ChatFormatting;
+import io.netty.buffer.Unpooled;
+import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.block.BannerBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -14,9 +16,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
+import net.minecraft.util.Hand;
+import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 import preternatural.items.ItemClaymore;
+import preternatural.network.ModPackets;
 import preternatural.utils.Waypoint;
 
 import java.util.ArrayList;
@@ -28,13 +33,15 @@ public class GuiWaypointSelect extends Screen {
 	protected int ticks = 0;
 	protected int selection = -1;
 	protected ItemStack tool;
+	protected Hand hand;
 
 	protected ArrayList<Waypoint> waypoints = new ArrayList<>();
 	protected ArrayList<ItemStack> displayStacks = new ArrayList<>();
 
-	public GuiWaypointSelect(ItemStack stack) {
+	public GuiWaypointSelect(ItemStack stack, Hand hand) {
 		super(NarratorManager.EMPTY);
 		this.tool = stack;
+		this.hand = hand;
 	}
 
 	@Override
@@ -142,7 +149,8 @@ public class GuiWaypointSelect extends Screen {
 				if(ysp < y)
 					ysp -= 9;
 
-				font.drawWithShadow(waypointName, xsp, ysp, 0xFFFFFF);
+				if (mouseInSector)
+					font.drawWithShadow(waypointName, xsp, ysp, 0xFFFFFF);
 			}
 		}
 
@@ -173,8 +181,22 @@ public class GuiWaypointSelect extends Screen {
 	public void tick() {
 		super.tick();
 		ticks++;
-		if(!hasShiftDown())
+		if(!hasShiftDown()) {
+			if (selection <= -1)
+				return;
+
+			PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+			CompoundTag tag = new CompoundTag();
+			Waypoint waypoint = waypoints.get(selection);
+			waypoint.name = displayStacks.get(selection).getName().asString();
+			waypoint.toNBT(tag);
+			buf.writeCompoundTag(tag);
+			buf.writeString(this.hand.toString());
+
+			ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.CLAYMORE_SELECTION, buf);
+			ItemClaymore.writeSelectedDestination(tool, Waypoint.fromNBT(tag));
 			MinecraftClient.getInstance().openScreen(null);
+		}
 	}
 
 	private static double mouseAngle(int x, int y, int mx, int my) {

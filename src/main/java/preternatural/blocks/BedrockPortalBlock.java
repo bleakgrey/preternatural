@@ -17,7 +17,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import preternatural.ModBlocks;
 import preternatural.utils.WorldUtils;
 
 import java.util.HashMap;

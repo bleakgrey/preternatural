@@ -21,7 +21,7 @@ import net.minecraft.world.gen.decorator.Decorator;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.TernarySurfaceConfig;
-import preternatural.ModEntities;
+import preternatural.entities.ModEntities;
 
 import java.util.Random;
 import java.util.function.Function;

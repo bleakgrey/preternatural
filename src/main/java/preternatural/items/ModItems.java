@@ -1,11 +1,12 @@
-package preternatural;
+package preternatural.items;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import preternatural.items.ItemClaymore;
+import preternatural.Mod;
+import preternatural.entities.ModEntities;
 
 public class ModItems {
 
@@ -15,7 +16,7 @@ public class ModItems {
 
     public static final Item CLAYMORE = new ItemClaymore();
 
-    static void register() {
+    public static void register() {
         Mod.log("REGISTER ITEMS");
         item(CLAYMORE, "claymore");
 

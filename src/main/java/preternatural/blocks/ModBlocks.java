@@ -1,4 +1,4 @@
-package preternatural;
+package preternatural.blocks;
 
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.*;
@@ -8,9 +8,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import preternatural.blocks.BedrockPortalBlock;
-import preternatural.blocks.BlockStairs;
-import preternatural.blocks.MeteoriteOreBlock;
+import preternatural.Mod;
 
 public class ModBlocks {
 
@@ -23,7 +21,7 @@ public class ModBlocks {
     public static final Block METEORITE = new Block(FabricBlockSettings.of(Material.STONE, MaterialColor.STONE).strength(15.0F, 15.0F).build());
     public static final Block METEORITE_ORE = new MeteoriteOreBlock(FabricBlockSettings.copy(METEORITE).build());
 
-    static void register() {
+    public static void register() {
         Mod.log("REGISTER BLOCKS");
         withItem("bedrock_bricks", BEDROCK_BRICKS);
         withItem("bedrock_bricks_chiseled", CHISELED_BEDROCK_BRICKS);

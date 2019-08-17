@@ -1,4 +1,4 @@
-package preternatural;
+package preternatural.entities;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -9,9 +9,8 @@ import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import preternatural.Mod;
 import preternatural.client.render.RiftRenderer;
-import preternatural.entities.EntityRift;
-import preternatural.entities.ScarecrowEntity;
 
 public class ModEntities {
 
@@ -26,12 +25,8 @@ public class ModEntities {
                     .build()
     );
 
-    static void register() {
-        Mod.log("REGISTER ENTITIES");
-    }
-
     @Environment(EnvType.CLIENT)
-    static void registerRenderers() {
+    public static void registerRenderers() {
         Mod.log("REGISTER ENTITY RENDERERS");
         EntityRendererRegistry.INSTANCE.register(EntityRift.class, (disp, ctx) -> new RiftRenderer(disp));
     }
