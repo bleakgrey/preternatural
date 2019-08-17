@@ -84,6 +84,7 @@ public class ItemClaymore extends SwordItem {
         rift.headYaw = rift.yaw;
         rift.field_6283 = rift.yaw;
         world.spawnEntity(rift);
+	    player.getItemCooldownManager().set(this, EntityRift.LIFESPAN);
         return ActionResult.SUCCESS;
     }
 

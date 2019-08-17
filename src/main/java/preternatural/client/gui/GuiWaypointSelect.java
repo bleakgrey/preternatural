@@ -25,8 +25,8 @@ import static net.minecraft.client.render.VertexFormats.POSITION_COLOR;
 
 public class GuiWaypointSelect extends Screen {
 
-	protected int timeIn = 0;
-	protected int slotSelected = -1;
+	protected int ticks = 0;
+	protected int selection = -1;
 	protected ItemStack tool;
 
 	protected ArrayList<Waypoint> waypoints = new ArrayList<>();
@@ -80,7 +80,7 @@ public class GuiWaypointSelect extends Screen {
 
 		for(int seg = 0; seg < segments; seg++) {
 			boolean mouseInSector = degPer * seg < angle && angle < degPer * (seg + 1);
-			float radius = Math.max(0F, Math.min((timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
+			float radius = Math.max(0F, Math.min((ticks + partialTicks - seg * 6F / segments) * 40F, maxRadius));
 			if (mouseInSector)
 				radius *= 1.025f;
 
@@ -96,7 +96,7 @@ public class GuiWaypointSelect extends Screen {
 				buf.vertex(x, y, 0).color(r, g, b, a).next();
 
 			if(mouseInSector) {
-				slotSelected = seg;
+				selection = seg;
 				r = g = b = 0xFF;
 			}
 
@@ -117,7 +117,7 @@ public class GuiWaypointSelect extends Screen {
 
 		for(int seg = 0; seg < segments; seg++) {
 			boolean mouseInSector = degPer * seg < angle && angle < degPer * (seg + 1);
-			float radius = Math.max(0F, Math.min((timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
+			float radius = Math.max(0F, Math.min((ticks + partialTicks - seg * 6F / segments) * 40F, maxRadius));
 
 			float rad = (seg + 0.5f) * degPer;
 			float xp = x + MathHelper.cos(rad) * radius;
@@ -146,7 +146,7 @@ public class GuiWaypointSelect extends Screen {
 			}
 		}
 
-		float shift = Math.min(5, timeIn + partialTicks) / 5;
+		float shift = Math.min(5, ticks + partialTicks) / 5;
 		float scale = 2 * shift;
 		GlStateManager.enableRescaleNormal();
 		GlStateManager.enableBlend();
@@ -172,7 +172,7 @@ public class GuiWaypointSelect extends Screen {
 	@Override
 	public void tick() {
 		super.tick();
-		timeIn++;
+		ticks++;
 		if(!hasShiftDown())
 			MinecraftClient.getInstance().openScreen(null);
 	}
