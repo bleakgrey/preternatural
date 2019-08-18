@@ -89,9 +89,9 @@ public class WheatFieldBiome extends Biome {
 		DefaultBiomeFeatures.addMineables(this);
 		DefaultBiomeFeatures.addDefaultOres(this);
 		DefaultBiomeFeatures.addDefaultDisks(this);
-//		DefaultBiomeFeatures.addLandCarvers(this);
-//		DefaultBiomeFeatures.addSprings(this);
-//		DefaultBiomeFeatures.addDefaultLakes(this);
+		DefaultBiomeFeatures.addLandCarvers(this);
+		DefaultBiomeFeatures.addSprings(this);
+		DefaultBiomeFeatures.addDefaultLakes(this);
 
 		this.addSpawn(EntityCategory.CREATURE, new SpawnEntry(EntityType.SHEEP, 12, 1, 1));
 		this.addSpawn(EntityCategory.CREATURE, new SpawnEntry(EntityType.CHICKEN, 10, 1, 1));
