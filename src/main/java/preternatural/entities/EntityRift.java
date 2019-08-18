@@ -5,10 +5,12 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.world.World;
 import preternatural.utils.Waypoint;
+import preternatural.utils.WorldUtils;
 
 public class EntityRift extends MobEntity {
 
@@ -38,21 +40,28 @@ public class EntityRift extends MobEntity {
     }
 
     @Override
+    public boolean isInvulnerable() {
+        return true;
+    }
+
+    @Override
     public void tick() {
         super.tick();
-        if(this.age > LIFESPAN)
+        if (this.age > LIFESPAN)
             this.remove();
+    }
 
-        if(this.world.isClient)
-            return;
-
-
+    @Override
+    public void onPlayerCollision(PlayerEntity player) {
+        super.onPlayerCollision(player);
+	    Waypoint waypoint = Waypoint.fromNBT(this.dataTracker.get(TRACKER_WAYPOINT));
+	    WorldUtils.teleport(player, waypoint);
     }
 
     @Override
     public void tickMovement() {
-        if(this.world.isClient)
-            for(int i = 0; i < 1; ++i)
+        if (this.world.isClient)
+            for (int i = 0; i < 1; ++i)
                 this.world.addParticle(ParticleTypes.MYCELIUM, this.x + (this.random.nextDouble() - 0.5D) * (double)this.getWidth(), this.y + this.random.nextDouble() * (double)this.getHeight(), this.z + (this.random.nextDouble() - 0.5D) * (double)this.getWidth(), 0.0D, 0.0D, 0.0D);
     }
 

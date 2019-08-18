@@ -70,10 +70,16 @@ public class ItemClaymore extends SwordItem {
         BlockState blockState = world.getBlockState(ctxBlockPos);
         PlayerEntity player = ctx.getPlayer();
         Hand hand = ctx.getHand();
-	    Waypoint waypoint = new Waypoint(player.getBlockPos(), player.dimension);
 
-        if (blockState.getBlock() instanceof BannerBlock)
-            return onUsedOnBanner(ctx, waypoint);
+	    if (blockState.getBlock() instanceof BannerBlock)
+		    return onUsedOnBanner(ctx, new Waypoint(player.getBlockPos(), player.dimension));
+
+        CompoundTag destination = stack.getSubTag(SUBTAG).getCompound(TAG_DESTINATION);
+	    Waypoint waypoint = Waypoint.fromNBT(destination);
+	    if (waypoint.isEmpty()) {
+	    	Mod.log("Empty destination!");
+		    return ActionResult.FAIL;
+	    }
 
 	    if (world.isClient)
 		    return ActionResult.SUCCESS;

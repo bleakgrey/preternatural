@@ -103,7 +103,7 @@ public class WheatFieldBiome extends Biome {
 		this.addFeature(GenerationStep.Feature.VEGETAL_DECORATION, Biome.configureFeature(WHEAT_FEATURE, new GrassFeatureConfig(WHEAT), Decorator.COUNT_HEIGHTMAP_DOUBLE, new CountDecoratorConfig(10)));
 
 		this.addStructureFeature(ModGeneration.myFeature, new DefaultFeatureConfig());
-		this.addFeature(GenerationStep.Feature.SURFACE_STRUCTURES, Biome.configureFeature(ModGeneration.myFeature, new DefaultFeatureConfig(), Decorator.CHANCE_PASSTHROUGH, new ChanceDecoratorConfig(32)));
+		this.addFeature(GenerationStep.Feature.SURFACE_STRUCTURES, Biome.configureFeature(ModGeneration.myFeature, new DefaultFeatureConfig(), Decorator.CHANCE_PASSTHROUGH, new ChanceDecoratorConfig(64)));
 	}
 
 }

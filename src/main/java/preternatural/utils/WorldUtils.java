@@ -1,10 +1,13 @@
 package preternatural.utils;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import preternatural.Mod;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -42,6 +45,24 @@ public class WorldUtils {
 				world.addParticle(effect, (double) pos.getX() + a, (double) pos.getY() + b, (double) pos.getZ() + c, 0.0D, 0.0D, 0.0D);
 			}
 		}
+	}
+
+	public static void teleport(Entity entity, Waypoint waypoint) {
+		if (entity.portalCooldown > 0 || !entity.canUsePortals() || entity.world.isClient)
+			return;
+
+		if (waypoint.isEmpty()) {
+			Mod.log("Invalid waypoint: "+waypoint.toString());
+			return;
+		}
+
+		entity.portalCooldown = 24;
+		ServerCommandSource src = entity.getServer().getCommandSource().withSilent();
+		entity.getServer().getCommandManager().execute(src, String.format("/execute in %s run tp %s %s",
+				waypoint.dim.toString(),
+				entity.getUuidAsString(),
+				String.format("%d %d %d", waypoint.pos.getX(), waypoint.pos.getY(), waypoint.pos.getZ()))
+		);
 	}
 
 }
