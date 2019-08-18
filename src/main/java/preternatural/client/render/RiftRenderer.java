@@ -1,6 +1,5 @@
 package preternatural.client.render;
 
-import preternatural.entities.EntityRift;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -8,6 +7,7 @@ import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import preternatural.entities.EntityRift;
 
 @Environment(EnvType.CLIENT)
 public class RiftRenderer extends MobEntityRenderer<EntityRift, RiftModel<EntityRift>> {

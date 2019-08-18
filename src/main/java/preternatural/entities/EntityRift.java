@@ -8,17 +8,12 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import preternatural.utils.Waypoint;
 
 public class EntityRift extends MobEntity {
 
     public static final int LIFESPAN = 100;
-    public static final TrackedData<Boolean> TRACKER_IS_VALID = DataTracker.registerData(EntityRift.class, TrackedDataHandlerRegistry.BOOLEAN);
-    public static final TrackedData<Integer> TRACKER_X = DataTracker.registerData(EntityRift.class, TrackedDataHandlerRegistry.INTEGER);
-    public static final TrackedData<Integer> TRACKER_Y = DataTracker.registerData(EntityRift.class, TrackedDataHandlerRegistry.INTEGER);
-    public static final TrackedData<Integer> TRACKER_Z = DataTracker.registerData(EntityRift.class, TrackedDataHandlerRegistry.INTEGER);
-    public static final TrackedData<String> TRACKER_DIM = DataTracker.registerData(EntityRift.class, TrackedDataHandlerRegistry.STRING);
+    public static final TrackedData<CompoundTag> TRACKER_WAYPOINT = DataTracker.registerData(EntityRift.class, TrackedDataHandlerRegistry.TAG_COMPOUND);
 
 	public EntityRift(EntityType<? extends EntityRift> entityType, World world) {
 		super(entityType, world);
@@ -27,11 +22,7 @@ public class EntityRift extends MobEntity {
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
-        dataTracker.startTracking(TRACKER_IS_VALID, false);
-        dataTracker.startTracking(TRACKER_DIM, DimensionType.OVERWORLD.toString());
-        dataTracker.startTracking(TRACKER_X, 0);
-        dataTracker.startTracking(TRACKER_Y, 0);
-        dataTracker.startTracking(TRACKER_Z, 0);
+        dataTracker.startTracking(TRACKER_WAYPOINT, new CompoundTag());
     }
 
     @Override
@@ -43,8 +34,7 @@ public class EntityRift extends MobEntity {
     @Override
     public void writeCustomDataToTag(CompoundTag nbt) {
         super.writeCustomDataToTag(nbt);
-        Waypoint waypoint = new Waypoint(this);
-        waypoint.toNBT(nbt);
+        Waypoint.fromNBT(this.dataTracker.get(TRACKER_WAYPOINT)).toNBT(nbt);
     }
 
     @Override

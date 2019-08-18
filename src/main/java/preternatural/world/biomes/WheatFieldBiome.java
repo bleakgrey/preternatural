@@ -16,12 +16,17 @@ import net.minecraft.world.biome.DefaultBiomeFeatures;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.ChunkGeneratorConfig;
+import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
 import net.minecraft.world.gen.decorator.CountDecoratorConfig;
 import net.minecraft.world.gen.decorator.Decorator;
-import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.feature.DefaultFeatureConfig;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.GrassFeature;
+import net.minecraft.world.gen.feature.GrassFeatureConfig;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.TernarySurfaceConfig;
 import preternatural.entities.ModEntities;
+import preternatural.world.ModGeneration;
 
 import java.util.Random;
 import java.util.function.Function;
@@ -29,7 +34,6 @@ import java.util.function.Function;
 public class WheatFieldBiome extends Biome {
 
 	private static final BlockState WHEAT = Blocks.WHEAT.getDefaultState().with(CropBlock.AGE, 7);
-	private static final BlockState GRASS = Blocks.GRASS_BLOCK.getDefaultState();
 	private static final BlockState TOP_BLOCK = Blocks.DIRT.getDefaultState();
 	private static final BlockState GRAVEL = Blocks.GRAVEL.getDefaultState();
 	private static final BlockState PEDESTAL = Blocks.OAK_SLAB.getDefaultState();
@@ -82,11 +86,8 @@ public class WheatFieldBiome extends Biome {
 				.waterFogColor(329011)
 				.parent(null)
 		);
-		this.addStructureFeature(Feature.SWAMP_HUT, FeatureConfig.DEFAULT);
-		this.addStructureFeature(Feature.VILLAGE, new VillageFeatureConfig("village/plains/town_centers", 6));
-		this.addStructureFeature(Feature.PILLAGER_OUTPOST, new PillagerOutpostFeatureConfig(0.004D));
-		this.addStructureFeature(Feature.MINESHAFT, new MineshaftFeatureConfig(0.004D, MineshaftFeature.Type.NORMAL));
-		this.addStructureFeature(Feature.STRONGHOLD, FeatureConfig.DEFAULT);
+
+		DefaultBiomeFeatures.addDefaultStructures(this);
 		DefaultBiomeFeatures.addDungeons(this);
 		DefaultBiomeFeatures.addMineables(this);
 		DefaultBiomeFeatures.addDefaultOres(this);
@@ -100,6 +101,9 @@ public class WheatFieldBiome extends Biome {
 		this.addSpawn(EntityCategory.CREATURE, new SpawnEntry(EntityType.COW, 8, 1, 1));
 
 		this.addFeature(GenerationStep.Feature.VEGETAL_DECORATION, Biome.configureFeature(WHEAT_FEATURE, new GrassFeatureConfig(WHEAT), Decorator.COUNT_HEIGHTMAP_DOUBLE, new CountDecoratorConfig(10)));
+
+		this.addStructureFeature(ModGeneration.myFeature, new DefaultFeatureConfig());
+		this.addFeature(GenerationStep.Feature.SURFACE_STRUCTURES, Biome.configureFeature(ModGeneration.myFeature, new DefaultFeatureConfig(), Decorator.CHANCE_PASSTHROUGH, new ChanceDecoratorConfig(32)));
 	}
 
 }
