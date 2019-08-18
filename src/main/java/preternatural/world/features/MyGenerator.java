@@ -1,5 +1,6 @@
 package preternatural.world.features;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.structure.SimpleStructurePiece;
 import net.minecraft.structure.Structure;
@@ -14,6 +15,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableIntBoundingBox;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.IWorld;
+import preternatural.blocks.ModBlocks;
 import preternatural.world.ModGeneration;
 
 import java.util.Random;
@@ -40,8 +42,7 @@ public class MyGenerator {
 		}
 
 		public void setStructureData(StructureManager structureManager) {
-			//Structure structure = structureManager.getStructureOrBlank(this.identifier);
-			Structure structure = structureManager.getStructureOrBlank(ModGeneration.BONEGRINDER_ID);
+			Structure structure = structureManager.getStructureOrBlank(this.identifier);
 			StructurePlacementData data = new StructurePlacementData()
 					.setRotation(this.rotation)
 					.setMirrored(BlockMirror.NONE)
@@ -58,13 +59,33 @@ public class MyGenerator {
 		}
 
 		@Override
-		protected void handleMetadata(String s, BlockPos blockPos, IWorld iWorld, Random random, MutableIntBoundingBox mutableIntBoundingBox) { }
+		protected void handleMetadata(String s, BlockPos pos, IWorld iWorld, Random rnd, MutableIntBoundingBox bb) {
+			switch (s) {
+				case "wall":
+					while (pos.getY() > -1) {
+						iWorld.setBlockState(pos, ModBlocks.BEDROCK_BRICKS.getDefaultState(), 0);
+						pos = pos.down();
+					}
+					break;
+				default:
+					while (pos.getY() > -1) {
+						iWorld.setBlockState(pos, Blocks.AIR.getDefaultState(), 0);
+						pos = pos.down();
+					}
+					break;
+			}
+		}
 
 		@Override
-		public boolean generate(IWorld iWorld_1, Random random_1, MutableIntBoundingBox mutableIntBoundingBox_1, ChunkPos chunkPos_1) {
-			int yHeight = iWorld_1.getTop(Heightmap.Type.WORLD_SURFACE_WG, this.pos.getX() + 8, this.pos.getZ() + 8);
+		public boolean generate(IWorld iWorld, Random rnd, MutableIntBoundingBox bb, ChunkPos chunkPos) {
+			int yHeight = iWorld.getTop(Heightmap.Type.WORLD_SURFACE_WG, this.pos.getX() + 8, this.pos.getZ() + 8);
 			this.pos = this.pos.add(0, yHeight - 1, 0);
-			return super.generate(iWorld_1, random_1, mutableIntBoundingBox_1, chunkPos_1);
+//			Mod.log("GEN AT: "+this.pos.toString());
+
+			//this.placementData.setBoundingBox(bb);
+			this.structure.method_15172(iWorld, this.pos, this.placementData, 0);
+			return false;
+//			return super.generate(iWorld, rnd, bb, chunkPos);
 		}
 	}
 }

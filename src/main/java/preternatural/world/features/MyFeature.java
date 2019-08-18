@@ -6,12 +6,10 @@ import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableIntBoundingBox;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.AbstractTempleFeature;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
-import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.StructureFeature;
 
 import java.util.Random;
@@ -42,12 +40,12 @@ public class MyFeature extends AbstractTempleFeature<DefaultFeatureConfig> {
 
 	@Override
 	public int getRadius() {
-		return 10;
+		return 3;
 	}
 
 	@Override
 	public boolean shouldStartAt(ChunkGenerator<?> chunkGenerator_1, Random random_1, int int_1, int int_2) {
-		return true;
+		return random_1.nextInt(90) == 0;
 	}
 
 	public class MyStructureStart extends StructureStart {
@@ -58,8 +56,6 @@ public class MyFeature extends AbstractTempleFeature<DefaultFeatureConfig> {
 
 		@Override
 		public void initialize(ChunkGenerator<?> chunkGenerator, StructureManager structureManager, int chunkX, int chunkZ, Biome biome) {
-			//DefaultFeatureConfig defaultFeatureConfig = chunkGenerator.getStructureConfig(biome, ModGeneration.myFeature);
-			FeatureConfig cfg = chunkGenerator.getStructureConfig(biome, Registry.STRUCTURE_FEATURE.get(id));
 			int x = chunkX * 16;
 			int z = chunkZ * 16;
 			BlockPos startingPos = new BlockPos(x, 0, z);

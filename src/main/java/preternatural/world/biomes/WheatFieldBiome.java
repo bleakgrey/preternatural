@@ -16,13 +16,10 @@ import net.minecraft.world.biome.DefaultBiomeFeatures;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.ChunkGeneratorConfig;
-import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
 import net.minecraft.world.gen.decorator.CountDecoratorConfig;
 import net.minecraft.world.gen.decorator.Decorator;
-import net.minecraft.world.gen.feature.DefaultFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.GrassFeature;
-import net.minecraft.world.gen.feature.GrassFeatureConfig;
+import net.minecraft.world.gen.decorator.DecoratorConfig;
+import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.TernarySurfaceConfig;
 import preternatural.entities.ModEntities;
@@ -92,9 +89,9 @@ public class WheatFieldBiome extends Biome {
 		DefaultBiomeFeatures.addMineables(this);
 		DefaultBiomeFeatures.addDefaultOres(this);
 		DefaultBiomeFeatures.addDefaultDisks(this);
-		DefaultBiomeFeatures.addLandCarvers(this);
-		DefaultBiomeFeatures.addSprings(this);
-		DefaultBiomeFeatures.addDefaultLakes(this);
+//		DefaultBiomeFeatures.addLandCarvers(this);
+//		DefaultBiomeFeatures.addSprings(this);
+//		DefaultBiomeFeatures.addDefaultLakes(this);
 
 		this.addSpawn(EntityCategory.CREATURE, new SpawnEntry(EntityType.SHEEP, 12, 1, 1));
 		this.addSpawn(EntityCategory.CREATURE, new SpawnEntry(EntityType.CHICKEN, 10, 1, 1));
@@ -103,7 +100,8 @@ public class WheatFieldBiome extends Biome {
 		this.addFeature(GenerationStep.Feature.VEGETAL_DECORATION, Biome.configureFeature(WHEAT_FEATURE, new GrassFeatureConfig(WHEAT), Decorator.COUNT_HEIGHTMAP_DOUBLE, new CountDecoratorConfig(10)));
 
 		this.addStructureFeature(ModGeneration.myFeature, new DefaultFeatureConfig());
-		this.addFeature(GenerationStep.Feature.SURFACE_STRUCTURES, Biome.configureFeature(ModGeneration.myFeature, new DefaultFeatureConfig(), Decorator.CHANCE_PASSTHROUGH, new ChanceDecoratorConfig(64)));
+		this.addFeature(GenerationStep.Feature.SURFACE_STRUCTURES, Biome.configureFeature(ModGeneration.myFeature, FeatureConfig.DEFAULT, Decorator.NOPE, DecoratorConfig.DEFAULT));
+//		this.addFeature(GenerationStep.Feature.SURFACE_STRUCTURES, Biome.configureFeature(ModGeneration.myFeature, new DefaultFeatureConfig(), Decorator.CHANCE_PASSTHROUGH, new ChanceDecoratorConfig(64)));
 	}
 
 }
