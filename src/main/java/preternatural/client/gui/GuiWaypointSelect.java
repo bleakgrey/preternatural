@@ -91,7 +91,7 @@ public class GuiWaypointSelect extends Screen {
 			if (mouseInSector)
 				radius *= 1.025f;
 
-			int gs = 0x50;//0x40;
+			int gs = 0x50;
 //			if(seg % 2 == 0)
 //				gs += 0x19;
 			int r = gs;
@@ -181,7 +181,14 @@ public class GuiWaypointSelect extends Screen {
 	public void tick() {
 		super.tick();
 		ticks++;
-		if(!hasShiftDown()) {
+
+		//InputUtil.KeyCode rightClick = InputUtil.fromName("key.mouse.right");
+		//InventoryScreen
+		//boolean pressed = InputUtil.isKeyPressed(MinecraftClient.getInstance().window.getHandle(), 340);
+		//int code = this.minecraft.options.keyUse.isPressed();
+		//boolean pressed = InputUtil.isKeyPressed(MinecraftClient.getInstance().window.getHandle(), code);
+		boolean pressed = hasShiftDown();
+		if (!pressed) {
 			if (selection <= -1)
 				return;
 

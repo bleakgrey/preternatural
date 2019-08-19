@@ -14,16 +14,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import preternatural.Mod;
 
 @Mixin(AbstractFurnaceBlockEntity.class)
-public abstract class AbstractFurnaceBlockEntityMixin extends LockableContainerBlockEntity {
+public abstract class FurnaceBlockEntityMixin extends LockableContainerBlockEntity {
 
 	private static final Identifier KABOOM_RECIPE = new Identifier(Mod.DOMAIN, "furnace_kaboom");
 
-	protected AbstractFurnaceBlockEntityMixin(BlockEntityType<?> type) { super(type); }
+	protected FurnaceBlockEntityMixin(BlockEntityType<?> type) { super(type); }
 
 	@Inject(method = "craftRecipe", at = @At("RETURN"))
 	private void craftRecipe(Recipe<?> recipe, CallbackInfo cb) {
-		boolean shouldBoom = recipe.getId().equals(KABOOM_RECIPE);
-		if (shouldBoom) {
+		if (recipe.getId().equals(KABOOM_RECIPE)) {
 			this.setInvStack(2, ItemStack.EMPTY);
 			this.world.createExplosion(null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 4.0F, Explosion.DestructionType.BREAK);
 		}

@@ -71,6 +71,9 @@ public class ItemClaymore extends SwordItem {
         PlayerEntity player = ctx.getPlayer();
         Hand hand = ctx.getHand();
 
+        if (player.isSneaking())
+        	return ActionResult.PASS;
+
 	    if (blockState.getBlock() instanceof BannerBlock)
 		    return onUsedOnBanner(ctx, new Waypoint(player.getBlockPos(), player.dimension));
 
