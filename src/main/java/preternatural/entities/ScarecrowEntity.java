@@ -64,7 +64,7 @@ public class ScarecrowEntity extends ArmorStandEntity {
 	@Override
 	public void tick() {
 		super.tick();
-		if(this.world.isClient) {
+		if (this.world.isClient) {
 			this.setEquippedStack(EquipmentSlot.HEAD, new ItemStack(isExcited() ? Items.JACK_O_LANTERN : Items.CARVED_PUMPKIN));
 			if (this.world.random.nextInt(getMovementTickRate()) > 0)
 				return;

@@ -16,6 +16,7 @@ import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.AbstractTempleFeature;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.StructureFeature;
+import preternatural.Mod;
 import preternatural.world.ModGeneration;
 
 import java.util.Random;
@@ -126,6 +127,7 @@ public class MyFeature extends AbstractTempleFeature<DefaultFeatureConfig> {
 	}
 
 	protected static void modifyDataBlock(String s, BlockPos pos, IWorld iWorld, Random rnd, MutableIntBoundingBox bb) {
+		Mod.log(s);
 //		switch (s) {
 //				case "wall":
 //					while (pos.getY() > -1) {
