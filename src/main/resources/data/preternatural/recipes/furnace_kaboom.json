@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "minecraft:tnt"
+  },
+  "result": "minecraft:coal",
+  "experience": 0,
+  "cookingtime": 80
+}

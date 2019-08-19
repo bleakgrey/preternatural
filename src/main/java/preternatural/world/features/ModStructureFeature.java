@@ -21,13 +21,15 @@ import preternatural.world.ModGeneration;
 
 import java.util.Random;
 
-public class MyFeature extends AbstractTempleFeature<DefaultFeatureConfig> {
+public class ModStructureFeature extends AbstractTempleFeature<DefaultFeatureConfig> {
 
 	private Identifier id;
+	private int chance;
 
-	public MyFeature(Identifier structureID) {
+	public ModStructureFeature(Identifier structureID, int chance) {
 		super(DefaultFeatureConfig::deserialize);
 		this.id = structureID;
+		this.chance = chance;
 	}
 
 	@Override
@@ -52,7 +54,7 @@ public class MyFeature extends AbstractTempleFeature<DefaultFeatureConfig> {
 
 	@Override
 	public boolean shouldStartAt(ChunkGenerator<?> chunkGenerator_1, Random random_1, int int_1, int int_2) {
-		return random_1.nextInt(90) == 0;
+		return random_1.nextInt(chance) == 0;
 	}
 
 	public class MyStructureStart extends StructureStart {
@@ -110,7 +112,7 @@ public class MyFeature extends AbstractTempleFeature<DefaultFeatureConfig> {
 
 		@Override
 		protected void handleMetadata(String s, BlockPos pos, IWorld iWorld, Random rnd, MutableIntBoundingBox bb) {
-			modifyDataBlock (s, pos, iWorld, rnd, bb);
+			modifyPieceDataBlock(s, pos, iWorld, rnd, bb);
 		}
 
 		@Override
@@ -126,7 +128,7 @@ public class MyFeature extends AbstractTempleFeature<DefaultFeatureConfig> {
 		}
 	}
 
-	protected static void modifyDataBlock(String s, BlockPos pos, IWorld iWorld, Random rnd, MutableIntBoundingBox bb) {
+	protected static void modifyPieceDataBlock(String s, BlockPos pos, IWorld iWorld, Random rnd, MutableIntBoundingBox bb) {
 		Mod.log(s);
 //		switch (s) {
 //				case "wall":

@@ -3,6 +3,7 @@
   "package": "preternatural.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+  	"AbstractFurnaceBlockEntityMixin"
   ],
   "client": [
     "ExampleMixin"

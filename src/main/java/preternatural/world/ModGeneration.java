@@ -12,15 +12,15 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.StructureFeature;
 import preternatural.Mod;
 import preternatural.world.biomes.WheatFieldBiome;
-import preternatural.world.features.MyFeature;
+import preternatural.world.features.ModStructureFeature;
 
 public class ModGeneration {
 
 	public static final Identifier BONEGRINDER_ID = new Identifier(Mod.DOMAIN, "bonegrinder");
 	public static final Identifier NETHERLANDS_PORTAL_ID = new Identifier(Mod.DOMAIN, "netherlands_portal");
 
-	public static final StructurePieceType myStructurePieceType = Registry.register(Registry.STRUCTURE_PIECE, "my_piece", MyFeature.Piece::new);
-	public static final StructureFeature<DefaultFeatureConfig> myFeature = Registry.register(Registry.FEATURE, "my_feature", new MyFeature(BONEGRINDER_ID));
+	public static final StructurePieceType myStructurePieceType = Registry.register(Registry.STRUCTURE_PIECE, BONEGRINDER_ID, ModStructureFeature.Piece::new);
+	public static final StructureFeature<DefaultFeatureConfig> myFeature = Registry.register(Registry.FEATURE, BONEGRINDER_ID, new ModStructureFeature(BONEGRINDER_ID, 100));
 	public static final StructureFeature<?> myStructure = Registry.register(Registry.STRUCTURE_FEATURE, BONEGRINDER_ID.toString(), myFeature);
 
 	public static final Biome WHEAT_FIELD_BIOME = Registry.register(Registry.BIOME, new Identifier(Mod.DOMAIN, "wheat_field"), new WheatFieldBiome());
