@@ -17,18 +17,20 @@ import net.minecraft.util.math.EulerAngle;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 public class ScarecrowEntity extends ArmorStandEntity {
 
 	public static final TrackedData<Boolean> TRACKER_EXCITEMENT = DataTracker.registerData(ScarecrowEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
 	public ScarecrowEntity(EntityType<? extends ArmorStandEntity> entityType, World world) {
 		super(entityType, world);
-		setEquipment();
+		setEquipment(world.random);
 	}
 
 	public ScarecrowEntity(World world, double x, double y, double z) {
 		super(world, x, y, z);
-		setEquipment();
+		setEquipment(world.random);
 	}
 
 	@Override
@@ -37,9 +39,13 @@ public class ScarecrowEntity extends ArmorStandEntity {
 		this.dataTracker.startTracking(TRACKER_EXCITEMENT, false);
 	}
 
-	private void setEquipment () {
+	private void setEquipment (Random rnd) {
 		this.setEquippedStack(EquipmentSlot.HEAD, new ItemStack(Items.CARVED_PUMPKIN));
-		this.setEquippedStack(EquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
+		ItemStack chest = new ItemStack(Items.LEATHER_CHESTPLATE);
+		chest.setDamage(Items.LEATHER_CHESTPLATE.getMaxDamage());
+		this.setEquippedStack(EquipmentSlot.CHEST, chest);
+		if (rnd.nextInt(3) == 0)
+			this.setEquippedStack(EquipmentSlot.MAINHAND, new ItemStack(Items.STICK));
 	}
 
 	@Override
@@ -60,19 +66,21 @@ public class ScarecrowEntity extends ArmorStandEntity {
 		super.tick();
 		if(this.world.isClient) {
 			this.setEquippedStack(EquipmentSlot.HEAD, new ItemStack(isExcited() ? Items.JACK_O_LANTERN : Items.CARVED_PUMPKIN));
+			if (this.world.random.nextInt(getMovementTickRate()) > 0)
+				return;
+
+			this.setHeadRotation(new EulerAngle(this.world.random.nextFloat() * 5f, this.world.random.nextFloat() * 5f, 0F));
+			this.setLeftArmRotation(new EulerAngle(-10F * this.world.random.nextFloat(), 0F, -10.0F));
+			if (isExcited() && this.getEquippedStack(EquipmentSlot.MAINHAND) != ItemStack.EMPTY)
+				this.setRightArmRotation(new EulerAngle(-15F * this.world.random.nextFloat(), 90F, 100f));
+			else
+				this.setRightArmRotation(new EulerAngle(-15F * this.world.random.nextFloat(), 0F, 10f));
+			this.world.playSound(this.x, this.y, this.z, SoundEvents.ENTITY_ARMOR_STAND_HIT, this.getSoundCategory(), 0.5F, 0.5F, false);
 		}
 		else {
-			if(this.world.random.nextInt(getMovementTickRate()) == 0) {
-				this.playSound(SoundEvents.ENTITY_ITEM_FRAME_BREAK, 0.5f, 0.5f);
-				this.dataTracker.set(TRACKER_LEFT_ARM_ROTATION, new EulerAngle(-10.0F * this.world.random.nextFloat(), 0.0F, -10.0F));
-				this.dataTracker.set(TRACKER_RIGHT_ARM_ROTATION, new EulerAngle(-15.0F * this.world.random.nextFloat(), 0.0F, 10.0F));
-				this.dataTracker.set(TRACKER_HEAD_ROTATION, new EulerAngle(this.world.random.nextFloat() * 5f, this.world.random.nextFloat() * 5f, 0.0F));
-
-			}
-
-			Entity closest = this.world.getClosestPlayer(this, 30);
+			Entity closest = this.world.getClosestPlayer(this, 8);
 			if (closest != null)
-				this.dataTracker.set(TRACKER_EXCITEMENT, closest.distanceTo(this) <= 10f);
+				this.dataTracker.set(TRACKER_EXCITEMENT, true);
 			else
 				this.dataTracker.set(TRACKER_EXCITEMENT, false);
 		}
@@ -83,7 +91,7 @@ public class ScarecrowEntity extends ArmorStandEntity {
 	}
 
 	protected int getMovementTickRate() {
-		return isExcited() ? 2 : 50;
+		return this.dataTracker.get(TRACKER_EXCITEMENT) ? 2 : 100;
 	}
 
 }
