@@ -54,11 +54,6 @@ public class ScarecrowEntity extends ArmorStandEntity {
 	}
 
 	@Override
-	public boolean shouldShowArms() {
-		return true;
-	}
-
-	@Override
 	protected void onEquipStack(ItemStack stack) { }
 
 	@Override
