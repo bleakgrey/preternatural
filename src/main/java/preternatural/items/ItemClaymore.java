@@ -14,7 +14,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
@@ -32,6 +31,8 @@ import preternatural.utils.WorldUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ItemClaymore extends SwordItem {
 
@@ -94,9 +95,7 @@ public class ItemClaymore extends SwordItem {
 
 		if (spawnRift(world, waypoint, pos, player)) {
 			player.getItemCooldownManager().set(this, EntityRift.LIFESPAN);
-			stack.damage(1, player, entity -> {
-				entity.sendEquipmentBreakStatus(hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
-			});
+			stack.damage(1, player, entity -> entity.sendEquipmentBreakStatus(hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND));
 			return ActionResult.SUCCESS;
 		}
         return ActionResult.FAIL;
@@ -153,12 +152,9 @@ public class ItemClaymore extends SwordItem {
 
     protected static boolean containsRecord(ItemStack stack, CompoundTag tag) {
 	    ListTag list = stack.getOrCreateSubTag(SUBTAG).getList(TAG_RECORDS, 10);
-	    for (Tag item : list) {
-		    CompoundTag listTag = (CompoundTag) item;
-		    if (areRecordsEqual(listTag, tag))
-		    	return true;
-	    }
-	    return false;
+	    return list.stream()
+			    .map(item -> (CompoundTag) item)
+			    .anyMatch(listTag -> areRecordsEqual(listTag, tag));
     }
 
     protected static void manipulateRecord(ItemStack stack, CompoundTag tag, boolean removeMode) {
@@ -166,13 +162,10 @@ public class ItemClaymore extends SwordItem {
     	ListTag list = nbt.getList(TAG_RECORDS, 10);
 
 	    if (removeMode) {
-		    ArrayList<CompoundTag> toRemove = new ArrayList<>();
-		    for (int i = 0; i < list.size(); i++) {
-			    CompoundTag listTag = list.getCompoundTag(i);
-			    if (areRecordsEqual(listTag, tag)) {
-			    	toRemove.add(listTag);
-			    }
-		    }
+		    ArrayList<CompoundTag> toRemove = IntStream.range(0, list.size())
+				    .mapToObj(list::getCompoundTag)
+				    .filter(listTag -> areRecordsEqual(listTag, tag))
+				    .collect(Collectors.toCollection(ArrayList::new));
 		    toRemove.forEach(list::remove);
 	    }
 	    else
