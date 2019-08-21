@@ -32,7 +32,6 @@ import preternatural.utils.WorldUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class ItemClaymore extends SwordItem {
 
@@ -60,14 +59,7 @@ public class ItemClaymore extends SwordItem {
 	    entity.world.createExplosion(entity, entity.x, entity.y, entity.z, 2.0F, Explosion.DestructionType.NONE);
         WorldUtils.teleport(entity, waypoint);
 	    entity.world.createExplosion(entity, entity.x, entity.y, entity.z, 2.0F, Explosion.DestructionType.NONE);
-
-	    if (player.world.isClient) {
-	    	Random rnd = player.world.random;
-		    for (int i = 0; i < 10; ++i)
-			    player.world.addParticle(ParticleTypes.HEART, entity.x + (rnd.nextDouble() - 0.5D) * (double) entity.getWidth(), entity.y + rnd.nextDouble() * (double) entity.getHeight(), entity.z + (rnd.nextDouble() - 0.5D) * (double) entity.getWidth(), 0.0D, 0.0D, 0.0D);
-	    }
-
-        return super.postHit(stack, entity, player);
+        return true;
     }
 
     @Override
@@ -110,7 +102,7 @@ public class ItemClaymore extends SwordItem {
         return ActionResult.FAIL;
     }
 
-    public boolean spawnRift(World world, Waypoint waypoint, BlockPos pos, Entity entity) {
+    public static boolean spawnRift(World world, Waypoint waypoint, BlockPos pos, Entity entity) {
 	    EntityRift rift = ModEntities.RIFT.create(world);
 	    waypoint.assignToRift(rift);
 	    rift.setPositionAndAngles(pos, entity.yaw, 0);
@@ -151,7 +143,7 @@ public class ItemClaymore extends SwordItem {
         return ActionResult.SUCCESS;
     }
 
-    public static boolean areRecordsEqual(CompoundTag tag1, CompoundTag tag2) {
+    protected static boolean areRecordsEqual(CompoundTag tag1, CompoundTag tag2) {
 		CompoundTag blockTag1 = tag1.getCompound("block");
 		CompoundTag blockTag2 = tag2.getCompound("block");
 		Waypoint waypoint1 = Waypoint.fromNBT(blockTag1);
@@ -159,7 +151,7 @@ public class ItemClaymore extends SwordItem {
 		return waypoint1.equals(waypoint2);
     }
 
-    public static boolean containsRecord(ItemStack stack, CompoundTag tag) {
+    protected static boolean containsRecord(ItemStack stack, CompoundTag tag) {
 	    ListTag list = stack.getOrCreateSubTag(SUBTAG).getList(TAG_RECORDS, 10);
 	    for (Tag item : list) {
 		    CompoundTag listTag = (CompoundTag) item;
@@ -169,7 +161,7 @@ public class ItemClaymore extends SwordItem {
 	    return false;
     }
 
-    public static void manipulateRecord(ItemStack stack, CompoundTag tag, boolean removeMode) {
+    protected static void manipulateRecord(ItemStack stack, CompoundTag tag, boolean removeMode) {
 	    CompoundTag nbt = stack.getOrCreateSubTag(SUBTAG);
     	ListTag list = nbt.getList(TAG_RECORDS, 10);
 
@@ -188,10 +180,9 @@ public class ItemClaymore extends SwordItem {
 
 	    nbt.put(TAG_RECORDS, list);
 	    stack.putSubTag(SUBTAG, nbt);
-	    //Mod.log("Result stack NBT: "+stack.getTag().toString());
     }
 
-    public static void writeSelectedDestination(ItemStack stack, Waypoint waypoint) {
+    protected static void writeSelectedDestination(ItemStack stack, Waypoint waypoint) {
     	CompoundTag nbt = stack.getOrCreateSubTag(SUBTAG);
     	CompoundTag tag = new CompoundTag();
 	    waypoint.toNBT(tag);
@@ -219,10 +210,6 @@ public class ItemClaymore extends SwordItem {
 			Waypoint waypoint = Waypoint.fromNBT(destination);
 			lines.add(new LiteralText("Destination: ").append(waypoint.name));
 		}
-
-//	    ListTag list = nbt.getList(TAG_RECORDS, 10);
-//	    if (list.size() > 0)
-//		    lines.add(new LiteralText("Saved waypoints: "+list.size()));
 	}
 
 }

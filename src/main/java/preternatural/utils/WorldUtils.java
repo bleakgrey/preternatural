@@ -7,7 +7,6 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import preternatural.Mod;
 import preternatural.entities.EntityRift;
 
 import java.util.HashMap;
@@ -51,11 +50,6 @@ public class WorldUtils {
 	public static void teleport(Entity entity, Waypoint waypoint) {
 		if (entity.portalCooldown > 0 || !entity.canUsePortals() || entity.world.isClient)
 			return;
-
-		if (waypoint.isEmpty()) {
-			Mod.log("Invalid waypoint: "+waypoint.toString());
-			return;
-		}
 
 		entity.portalCooldown = 24;
 		EntityRift.playSound(entity);

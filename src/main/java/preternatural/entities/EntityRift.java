@@ -56,7 +56,7 @@ public class EntityRift extends MobEntity {
         if (this.age > LIFESPAN)
             this.remove();
 
-        if(this.age == 1)
+        if (this.age == 1)
             playSound(this);
     }
 
