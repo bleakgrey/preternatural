@@ -1,5 +1,6 @@
 package preternatural.entities;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -8,6 +9,7 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
 import preternatural.utils.Waypoint;
 import preternatural.utils.WorldUtils;
@@ -20,6 +22,10 @@ public class EntityRift extends MobEntity {
 	public EntityRift(EntityType<? extends EntityRift> entityType, World world) {
 		super(entityType, world);
 	}
+
+	public static void playSound(Entity entity) {
+        entity.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1f, 0.25f);
+    }
 
     @Override
     protected void initDataTracker() {
@@ -49,11 +55,15 @@ public class EntityRift extends MobEntity {
         super.tick();
         if (this.age > LIFESPAN)
             this.remove();
+
+        if(this.age == 1)
+            playSound(this);
     }
 
     @Override
     public void onPlayerCollision(PlayerEntity player) {
         super.onPlayerCollision(player);
+        playSound(this);
 	    Waypoint waypoint = Waypoint.fromNBT(this.dataTracker.get(TRACKER_WAYPOINT));
 	    WorldUtils.teleport(player, waypoint);
     }

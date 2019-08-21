@@ -1,7 +1,5 @@
 package preternatural.items;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BannerBlock;
@@ -12,8 +10,6 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundTag;
@@ -36,6 +32,7 @@ import preternatural.utils.WorldUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ItemClaymore extends SwordItem {
 
@@ -51,17 +48,29 @@ public class ItemClaymore extends SwordItem {
     }
 
     @Override
-    public Multimap<String, EntityAttributeModifier> getModifiers(EquipmentSlot equipmentSlot_1) {
-        return HashMultimap.create();
-    }
-
-    @Override
     public boolean postHit(ItemStack stack, LivingEntity entity, LivingEntity player) {
-        player.world.createExplosion(entity, DamageSource.MAGIC, entity.x, entity.y, entity.z, 4.0F, false, Explosion.DestructionType.BREAK);
-        stack.damage(getMaterial().getDurability(), player, (plr) -> plr.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
+	    CompoundTag destination = stack.getSubTag(SUBTAG).getCompound(TAG_DESTINATION);
+	    Waypoint waypoint = Waypoint.fromNBT(destination);
+	    if (waypoint.isEmpty()) {
+		    Mod.log("Empty destination!");
+		    return false;
+	    }
+
+        stack.damage(8, player, (plr) -> plr.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
+	    entity.world.createExplosion(entity, entity.x, entity.y, entity.z, 2.0F, Explosion.DestructionType.NONE);
+        WorldUtils.teleport(entity, waypoint);
+	    entity.world.createExplosion(entity, entity.x, entity.y, entity.z, 2.0F, Explosion.DestructionType.NONE);
+
+	    if (player.world.isClient) {
+	    	Random rnd = player.world.random;
+		    for (int i = 0; i < 10; ++i)
+			    player.world.addParticle(ParticleTypes.HEART, entity.x + (rnd.nextDouble() - 0.5D) * (double) entity.getWidth(), entity.y + rnd.nextDouble() * (double) entity.getHeight(), entity.z + (rnd.nextDouble() - 0.5D) * (double) entity.getWidth(), 0.0D, 0.0D, 0.0D);
+	    }
+
         return super.postHit(stack, entity, player);
     }
 
+    @Override
     public ActionResult useOnBlock(ItemUsageContext ctx) {
         World world = ctx.getWorld();
         ItemStack stack = ctx.getStack();
@@ -164,7 +173,7 @@ public class ItemClaymore extends SwordItem {
 	    CompoundTag nbt = stack.getOrCreateSubTag(SUBTAG);
     	ListTag list = nbt.getList(TAG_RECORDS, 10);
 
-	    if(removeMode) {
+	    if (removeMode) {
 		    ArrayList<CompoundTag> toRemove = new ArrayList<>();
 		    for (int i = 0; i < list.size(); i++) {
 			    CompoundTag listTag = list.getCompoundTag(i);

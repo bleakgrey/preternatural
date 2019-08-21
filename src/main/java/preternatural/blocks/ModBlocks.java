@@ -15,11 +15,12 @@ public class ModBlocks {
     public static final Block BEDROCK_BRICKS = new Block(FabricBlockSettings.copy(Blocks.BEDROCK).build());
     public static final Block CHISELED_BEDROCK_BRICKS = new Block(FabricBlockSettings.copy(Blocks.BEDROCK).build());
     public static final Block BEDROCK_FORCEFIELD = new StainedGlassBlock(DyeColor.GRAY, FabricBlockSettings.copy(Blocks.BEDROCK).build());
-    public static final Block BEDROCK_BRICK_STAIRS = new BlockStairs(Blocks.BEDROCK.getDefaultState(), FabricBlockSettings.copy(Blocks.BEDROCK).build());
+    public static final Block BEDROCK_BRICK_STAIRS = new ModStairsBlock(Blocks.BEDROCK.getDefaultState(), FabricBlockSettings.copy(Blocks.BEDROCK).build());
     public static final Block BEDROCK_PORTAL = new BedrockPortalBlock(FabricBlockSettings.copy(Blocks.BEDROCK).build());
 
     public static final Block METEORITE = new Block(FabricBlockSettings.of(Material.STONE, MaterialColor.STONE).strength(15.0F, 15.0F).build());
     public static final Block METEORITE_ORE = new MeteoriteOreBlock(FabricBlockSettings.copy(METEORITE).build());
+    public static final Block BLIGHT = new BlightBlock(FabricBlockSettings.copy(Blocks.MYCELIUM).build());
 
     public static void register() {
         Mod.log("REGISTER BLOCKS");
@@ -31,6 +32,7 @@ public class ModBlocks {
 
         withItem("meteorite", METEORITE);
         withItem("meteorite_ore", METEORITE_ORE);
+        withItem("blight", BLIGHT);
     }
 
     private static void withItem(String id, Block block) {

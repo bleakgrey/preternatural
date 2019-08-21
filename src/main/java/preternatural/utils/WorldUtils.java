@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import preternatural.Mod;
+import preternatural.entities.EntityRift;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -57,12 +58,13 @@ public class WorldUtils {
 		}
 
 		entity.portalCooldown = 24;
+		EntityRift.playSound(entity);
 		ServerCommandSource src = entity.getServer().getCommandSource().withSilent();
 		entity.getServer().getCommandManager().execute(src, String.format("/execute in %s run tp %s %s",
 				waypoint.dim.toString(),
 				entity.getUuidAsString(),
-				String.format("%d %d %d", waypoint.pos.getX(), waypoint.pos.getY(), waypoint.pos.getZ()))
-		);
+				String.format("%d %d %d", waypoint.pos.getX(), waypoint.pos.getY(), waypoint.pos.getZ())
+		));
 	}
 
 }

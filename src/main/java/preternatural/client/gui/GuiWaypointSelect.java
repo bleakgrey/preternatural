@@ -85,7 +85,7 @@ public class GuiWaypointSelect extends Screen {
 		//GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		buf.begin(GL11.GL_TRIANGLE_FAN, POSITION_COLOR);
 
-		for(int seg = 0; seg < segments; seg++) {
+		for (int seg = 0; seg < segments; seg++) {
 			boolean mouseInSector = degPer * seg < angle && angle < degPer * (seg + 1);
 			float radius = Math.max(0F, Math.min((ticks + partialTicks - seg * 6F / segments) * 40F, maxRadius));
 			if (mouseInSector)
@@ -99,15 +99,15 @@ public class GuiWaypointSelect extends Screen {
 			int b = gs;
 			int a = 0x30;
 
-			if(seg == 0)
+			if (seg == 0)
 				buf.vertex(x, y, 0).color(r, g, b, a).next();
 
-			if(mouseInSector) {
+			if (mouseInSector) {
 				selection = seg;
 				r = g = b = 0xFF;
 			}
 
-			for(float i = 0; i < degPer + step / 2; i += step) {
+			for (float i = 0; i < degPer + step / 2; i += step) {
 				float rad = i + seg * degPer;
 				float xp = x + MathHelper.cos(rad) * radius;
 				float yp = y + MathHelper.sin(rad) * radius;
@@ -122,7 +122,7 @@ public class GuiWaypointSelect extends Screen {
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 		GlStateManager.enableTexture();
 
-		for(int seg = 0; seg < segments; seg++) {
+		for (int seg = 0; seg < segments; seg++) {
 			boolean mouseInSector = degPer * seg < angle && angle < degPer * (seg + 1);
 			float radius = Math.max(0F, Math.min((ticks + partialTicks - seg * 6F / segments) * 40F, maxRadius));
 
@@ -131,7 +131,7 @@ public class GuiWaypointSelect extends Screen {
 			float yp = y + MathHelper.sin(rad) * radius;
 
 			ItemStack stack = displayStacks.get(seg);
-			if(!stack.isEmpty()) {
+			if (!stack.isEmpty()) {
 				float xsp = xp - 4;
 				float ysp = yp;
 
@@ -144,9 +144,9 @@ public class GuiWaypointSelect extends Screen {
 
 				MinecraftClient.getInstance().getItemRenderer().renderGuiItem(stack, xdp - 8, ydp - 8);
 
-				if(xsp < x)
+				if (xsp < x)
 					xsp -= width - 8;
-				if(ysp < y)
+				if (ysp < y)
 					ysp -= 9;
 
 				if (mouseInSector)

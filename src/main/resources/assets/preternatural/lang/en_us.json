@@ -1,5 +1,6 @@
 {
 	"item.preternatural.claymore": "Dimensional Claymore",
+	"item.preternatural.vile_remnant": "Vile Remant",
 
 	"block.preternatural.bedrock_bricks": "Bedrock Bricks",
 	"block.preternatural.bedrock_bricks_chiseled": "Chiseled Bedrock Bricks",
@@ -9,11 +10,12 @@
 
 	"block.preternatural.meteorite": "Strange Stone",
 	"block.preternatural.meteorite_ore": "Leaking Strange Stone",
+	"block.preternatural.blight": "Strange Grass",
 
 	"advancements.netherlands.title": "Unwelcome Descent",
 	"advancements.netherlands.description": "Survive the descension to Netherlands... somehow",
 	"advancements.meteorite.title": "A Color From Space",
-	"advancements.meteorite.description": "Find and mine some strange meteorite ore",
+	"advancements.meteorite.description": "Find and mine some strange meteorite",
 
 	"biome.preternatural.wheat_field": "Wheat Field"
 }
