@@ -175,7 +175,7 @@ public class ItemClaymore extends SwordItem {
 	    stack.putSubTag(SUBTAG, nbt);
     }
 
-    protected static void writeSelectedDestination(ItemStack stack, Waypoint waypoint) {
+    public static void writeSelectedDestination(ItemStack stack, Waypoint waypoint) {
     	CompoundTag nbt = stack.getOrCreateSubTag(SUBTAG);
     	CompoundTag tag = new CompoundTag();
 	    waypoint.toNBT(tag);
