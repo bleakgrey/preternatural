@@ -4,7 +4,9 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
   	"FurnaceBlockEntityMixin",
-  	"ArmorStandMixin"
+  	"ArmorStandMixin",
+  	"CriterionRegistryAccessor",
+  	"TickCriterionMixin"
   ],
   "client": [
     "ExampleMixin"

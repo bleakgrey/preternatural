@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:end/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:chorus_plant"
+    },
+    "title": {
+      "translate": "advancements.dont_kill_dragon.title"
+    },
+    "description": {
+      "translate": "advancements.dont_kill_dragon.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "didnt_kill_dragon": {
+      "trigger": "preternatural:is_incomplete",
+      "conditions": {
+          "id": "minecraft:end/kill_dragon"
+      }
+    },
+    "small_end_islands": {
+        "trigger": "minecraft:location",
+        "conditions": {
+            "dimension": "minecraft:the_end",
+            "biome": "minecraft:small_end_islands"
+        }
+    },
+    "end_midlands": {
+        "trigger": "minecraft:location",
+        "conditions": {
+            "dimension": "minecraft:the_end",
+            "biome": "minecraft:end_midlands"
+        }
+    },
+    "end_highlands": {
+        "trigger": "minecraft:location",
+        "conditions": {
+            "dimension": "minecraft:the_end",
+            "biome": "minecraft:end_highlands"
+        }
+    }
+  },
+  "requirements": [
+      ["didnt_kill_dragon"],
+      ["small_end_islands", "end_midlands", "end_highlands"]
+  ],
+  "rewards": {
+      "experience": 1000
+  }
+}

@@ -1,6 +1,8 @@
 {
 	"item.preternatural.claymore": "Dimensional Claymore",
 	"item.preternatural.vile_remnant": "Vile Remant",
+	"item.preternatural.shulker_ingot": "Shellsteel Ingot",
+	"item.preternatural.shulker_nugget": "Shellsteel Nugget",
 
 	"block.preternatural.bedrock_bricks": "Bedrock Bricks",
 	"block.preternatural.bedrock_bricks_chiseled": "Chiseled Bedrock Bricks",
@@ -16,6 +18,8 @@
 	"advancements.netherlands.description": "Survive the descension to Netherlands... somehow",
 	"advancements.meteorite.title": "A Color From Space",
 	"advancements.meteorite.description": "Find and mine some strange meteorite",
+	"advancements.dont_kill_dragon.title": "Hardcore Indifference",
+	"advancements.dont_kill_dragon.description": "Visit an outer ender island without killing the Ender Dragon",
 
 	"biome.preternatural.wheat_field": "Wheat Field"
 }
