@@ -48,13 +48,13 @@ public class IsIncompleteCriterion implements Criterion<IsIncompleteCriterion.Co
 	}
 
 	@Override
-	public void endTracking(PlayerAdvancementTracker playerAdvancementTracker_1) {
-		this.handlers.remove(playerAdvancementTracker_1);
+	public void endTracking(PlayerAdvancementTracker tracker) {
+		this.handlers.remove(tracker);
 	}
 
 	@Override
-	public IsIncompleteCriterion.Conditions conditionsFromJson(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext) {
-		String id = jsonObject.get("id").getAsString();
+	public IsIncompleteCriterion.Conditions conditionsFromJson(JsonObject obj, JsonDeserializationContext ctx) {
+		String id = obj.get("id").getAsString();
 		return new IsIncompleteCriterion.Conditions(id);
 	}
 
@@ -63,8 +63,6 @@ public class IsIncompleteCriterion implements Criterion<IsIncompleteCriterion.Co
 		if (handler != null)
 			handler.handle(entity.getCommandSource().getMinecraftServer().getAdvancementManager().getAdvancements());
 	}
-
-
 
 	static class Handler {
 		private final PlayerAdvancementTracker manager;
@@ -111,8 +109,6 @@ public class IsIncompleteCriterion implements Criterion<IsIncompleteCriterion.Co
 
 		}
 	}
-
-
 
 	public static class Conditions extends AbstractCriterionConditions {
 		private final String advancementId;

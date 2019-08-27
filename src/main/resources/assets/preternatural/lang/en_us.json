@@ -14,10 +14,12 @@
 	"block.preternatural.meteorite_ore": "Leaking Strange Stone",
 	"block.preternatural.blight": "Strange Grass",
 
-	"advancements.netherlands.title": "Unwelcome Descent",
-	"advancements.netherlands.description": "Survive the descension to Netherlands... somehow",
+	"block.preternatural.cursing_table": "Cursing Table",
+
+	"advancements.netherlands.title": "Unwelcome Guest",
+	"advancements.netherlands.description": "Descend to Netherlands alive",
 	"advancements.meteorite.title": "A Color From Space",
-	"advancements.meteorite.description": "Find and mine some strange meteorite",
+	"advancements.meteorite.description": "Find and mine a meteorite",
 	"advancements.dont_kill_dragon.title": "Hardcore Indifference",
 	"advancements.dont_kill_dragon.description": "Visit an outer ender island without killing the Ender Dragon",
 

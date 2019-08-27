@@ -1,11 +1,10 @@
 {
     "variants": {
-        "snowy=false": [
+        "": [
             { "model": "preternatural:block/blight" },
             { "model": "preternatural:block/blight", "y": 90 },
             { "model": "preternatural:block/blight", "y": 180 },
             { "model": "preternatural:block/blight", "y": 270 }
-        ],
-        "snowy=true": { "model": "preternatural:block/blight" }
+        ]
     }
 }

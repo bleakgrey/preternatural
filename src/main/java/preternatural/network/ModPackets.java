@@ -17,12 +17,12 @@ import preternatural.utils.Waypoint;
 
 public class ModPackets {
 
-	public static final Identifier CLAYMORE_SELECTION = new Identifier(Mod.DOMAIN, "claymore_selection");
+	public static final Identifier C2S_CLAYMORE_SELECTION = new Identifier(Mod.DOMAIN, "claymore_selection");
 
 	public static void register() {
 		Mod.log("REGISTER SERVER PACKETS");
 
-		ServerSidePacketRegistry.INSTANCE.register(CLAYMORE_SELECTION, new PacketConsumer() {
+		ServerSidePacketRegistry.INSTANCE.register(C2S_CLAYMORE_SELECTION, new PacketConsumer() {
 			@Override public void accept(PacketContext ctx, PacketByteBuf buf) {
 				CompoundTag tag = buf.readCompoundTag();
 				Hand hand = Hand.valueOf(buf.readString());

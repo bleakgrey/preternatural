@@ -200,7 +200,7 @@ public class GuiWaypointSelect extends Screen {
 			buf.writeCompoundTag(tag);
 			buf.writeString(this.hand.toString());
 
-			ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.CLAYMORE_SELECTION, buf);
+			ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.C2S_CLAYMORE_SELECTION, buf);
 			ItemClaymore.writeSelectedDestination(tool, Waypoint.fromNBT(tag));
 			MinecraftClient.getInstance().openScreen(null);
 		}

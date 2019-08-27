@@ -2,6 +2,7 @@ package preternatural.blocks;
 
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -22,6 +23,9 @@ public class ModBlocks {
     public static final Block METEORITE_ORE = new MeteoriteOreBlock(FabricBlockSettings.copy(METEORITE).build());
     public static final Block BLIGHT = new BlightBlock(FabricBlockSettings.copy(Blocks.MYCELIUM).build());
 
+    public static final Block CURSING_TABLE = new CursingTableBlock(FabricBlockSettings.copy(Blocks.ENCHANTING_TABLE).build());
+    public static final BlockEntityType<CursingTableBlock.Entity> CURSING_TABLE_ENTITY = Registry.register(Registry.BLOCK_ENTITY, Mod.DOMAIN+":cursing_table", BlockEntityType.Builder.create(CursingTableBlock.Entity::new, CURSING_TABLE).build(null));
+
     public static void register() {
         Mod.log("REGISTER BLOCKS");
         withItem("bedrock_bricks", BEDROCK_BRICKS);
@@ -33,6 +37,8 @@ public class ModBlocks {
         withItem("meteorite", METEORITE);
         withItem("meteorite_ore", METEORITE_ORE);
         withItem("blight", BLIGHT);
+
+        withItem("cursing_table", CURSING_TABLE);
     }
 
     private static void withItem(String id, Block block) {
